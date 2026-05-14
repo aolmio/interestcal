@@ -6,7 +6,7 @@
     <title>အတိုးတွက်စနစ်</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <link class="pwa-manifest" rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,7 +14,6 @@
         body { 
             font-family: 'Inter', 'Padauk', sans-serif; 
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-            /* Avoid Punch Hole / Dynamic Island / Notch */
             padding-top: max(1rem, env(safe-area-inset-top));
             padding-bottom: max(1rem, env(safe-area-inset-bottom));
             padding-left: max(1rem, env(safe-area-inset-left));
@@ -31,23 +30,23 @@
 
         <div class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">အရင်းပမာဏ (ကျပ်)</label>
-                <input type="number" id="principal" value="300000" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+                <label class="block text-sm font-medium text-gray-700 mb-1">ချေးငွေ / အရင်းပမာဏ (ကျပ်)</label>
+                <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ဥပမာ - 300000">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">အတိုးနှုန်း (ကျပ်)</label>
-                <input type="number" id="rate" value="3" step="0.1" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+                <input type="text" id="rate" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ဥပမာ - 3">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
-                <input type="text" id="start-date-text" value="25-04-2025" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+                <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="နေ့လခုနှစ် (ဥပမာ - 2542025)">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">လာရောက်ရွေးယူသည့် ရက်စွဲ</label>
-                <input type="text" id="end-date-text" value="25-01-2026" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+                <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="နေ့လခုနှစ် (ဥပမာ - 2512026)">
             </div>
 
             <button onclick="toggleOptions()" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 focus:outline-none flex items-center py-1">
@@ -69,7 +68,10 @@
                 </label>
             </div>
 
-            <button onclick="parseAndCalculate()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg mt-2 active:scale-95 transition-all text-lg">တွက်ချက်မည်</button>
+            <div class="grid grid-cols-3 gap-2 mt-2">
+                <button onclick="clearAllFields()" class="col-span-1 py-4 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl border border-red-200 active:scale-95 transition-all text-sm sm:text-base">အကုန်ဖျက်</button>
+                <button onclick="parseAndCalculate()" class="col-span-2 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg active:scale-95 transition-all text-lg">တွက်ချက်မည်</button>
+            </div>
         </div>
 
         <div id="error-box" class="text-red-500 text-sm text-center font-medium hidden mt-4"></div>
@@ -84,8 +86,6 @@
 
     <script>
         window.onload = function() { 
-            parseAndCalculate(); 
-            // PWA Service Worker Register
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(function(err) {
                     console.log('Service Worker Registration Failed: ', err);
@@ -95,6 +95,15 @@
 
         function toggleOptions() {
             document.getElementById('options-container').classList.toggle('hidden');
+        }
+
+        function clearAllFields() {
+            document.getElementById('principal').value = '';
+            document.getElementById('rate').value = '';
+            document.getElementById('start-date-text').value = '';
+            document.getElementById('end-date-text').value = '';
+            document.getElementById('error-box').classList.add('hidden');
+            document.getElementById('result-box').classList.add('hidden');
         }
 
         function smartFormatDate(input) {
@@ -126,6 +135,15 @@
         function parseAndCalculate() {
             const errorBox = document.getElementById('error-box');
             const resultBox = document.getElementById('result-box');
+            
+            const pInput = document.getElementById('principal').value;
+            const rInput = document.getElementById('rate').value;
+            
+            if(!pInput || !rInput) {
+                errorBox.innerText = "* အချက်အလက်များ အပြည့်အစုံထည့်ပါ။";
+                errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
+            }
+
             smartFormatDate(document.getElementById('start-date-text'));
             smartFormatDate(document.getElementById('end-date-text'));
 
@@ -138,8 +156,8 @@
             }
             errorBox.classList.add('hidden');
 
-            const principal = parseFloat(document.getElementById('principal').value) || 0;
-            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const principal = parseFloat(pInput) || 0;
+            const rate = parseFloat(rInput) || 0;
             const dayOption = document.querySelector('input[name="day-option"]:checked').value;
 
             let mDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
