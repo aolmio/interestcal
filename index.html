@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>အတိုးတွက်စနစ်</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        body { 
+            font-family: 'Inter', 'Padauk', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+            /* Avoid Punch Hole / Dynamic Island / Notch */
+            padding-top: max(1rem, env(safe-area-inset-top));
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 my-auto">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-1">အတိုးတွက်စနစ်</h1>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">အရင်းပမာဏ (ကျပ်)</label>
+                <input type="number" id="principal" value="300000" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">အတိုးနှုန်း (ကျပ်)</label>
+                <input type="number" id="rate" value="3" step="0.1" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
+                <input type="text" id="start-date-text" value="25-04-2025" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">လာရောက်ရွေးယူသည့် ရက်စွဲ</label>
+                <input type="text" id="end-date-text" value="25-01-2026" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg">
+            </div>
+
+            <button onclick="toggleOptions()" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 focus:outline-none flex items-center py-1">
+                <span>⚙️ ရက်စွန်းတွက်နည်း ပြောင်းရန်</span>
+            </button>
+
+            <div id="options-container" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                <label class="flex items-center text-sm cursor-pointer py-1">
+                    <input type="radio" name="day-option" value="full-month" checked class="h-5 w-5 text-indigo-600">
+                    <span class="ml-3 font-semibold text-gray-700">၁ ရက်စွန်းလျှင် ၁ လစာယူရန် (Default)</span>
+                </label>
+                <label class="flex items-center text-sm cursor-pointer py-1">
+                    <input type="radio" name="day-option" value="exact" class="h-5 w-5 text-indigo-600">
+                    <span class="ml-3 font-semibold text-gray-700">ရက်အလိုက် တိတိကျကျတွက်ရန်</span>
+                </label>
+                <label class="flex items-center text-sm cursor-pointer py-1">
+                    <input type="radio" name="day-option" value="half-month" class="h-5 w-5 text-indigo-600">
+                    <span class="ml-3 font-semibold text-gray-700">လဝက် / ၁လစာ ဖြတ်ရန်</span>
+                </label>
+            </div>
+
+            <button onclick="parseAndCalculate()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg mt-2 active:scale-95 transition-all text-lg">တွက်ချက်မည်</button>
+        </div>
+
+        <div id="error-box" class="text-red-500 text-sm text-center font-medium hidden mt-4"></div>
+
+        <div id="result-box" class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 hidden mt-6 space-y-3">
+            <div class="flex justify-between text-sm"><span class="text-gray-600">ကြာမြင့်ချိန် ကာလ:</span><span id="duration-text" class="font-bold text-gray-800">-</span></div>
+            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600">၁ လစာ အတိုးနှုန်း:</span><span id="monthly-interest" class="font-semibold text-gray-700">-</span></div>
+            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600">စုစုပေါင်း ကျသင့်အတိုး:</span><span id="total-interest" class="font-bold text-indigo-600 text-xl">-</span></div>
+            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600 font-medium">စုစုပေါင်း (အရင်း + အတိုး):</span><span id="grand-total" class="font-extrabold text-emerald-600 text-2xl">-</span></div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() { 
+            parseAndCalculate(); 
+            // PWA Service Worker Register
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(function(err) {
+                    console.log('Service Worker Registration Failed: ', err);
+                });
+            }
+        };
+
+        function toggleOptions() {
+            document.getElementById('options-container').classList.toggle('hidden');
+        }
+
+        function smartFormatDate(input) {
+            let clean = input.value.replace(/\D/g, '');
+            if (input.value.includes('-') || input.value.includes('/')) {
+                let parts = input.value.split(/[-/]/);
+                if(parts.length === 3) {
+                    let d = parts[0].padStart(2, '0'); let m = parts[1].padStart(2, '0'); let y = parts[2];
+                    if(y.length === 4) { input.value = `${d}-${m}-${y}`; return; }
+                }
+            }
+            if (clean.length === 7) { 
+                input.value = `${clean.slice(0, 2)}-${'0' + clean.slice(2, 3)}-${clean.slice(3, 7)}`;
+            } else if (clean.length === 8) { 
+                input.value = `${clean.slice(0, 2)}-${clean.slice(2, 4)}-${clean.slice(4, 8)}`;
+            } else if (clean.length === 6) {
+                input.value = `${'0' + clean.slice(0, 1)}-${'0' + clean.slice(1, 2)}-${clean.slice(2, 6)}`;
+            }
+        }
+
+        function parseDateString(dateStr) {
+            const parts = dateStr.split('-');
+            if (parts.length !== 3 || parts[2].length !== 4) return null;
+            const d = parseInt(parts[0], 10); const m = parseInt(parts[1], 10) - 1; const y = parseInt(parts[2], 10);
+            const dateObj = new Date(y, m, d);
+            return (dateObj.getFullYear() === y && dateObj.getMonth() === m && dateObj.getDate() === d) ? dateObj : null;
+        }
+
+        function parseAndCalculate() {
+            const errorBox = document.getElementById('error-box');
+            const resultBox = document.getElementById('result-box');
+            smartFormatDate(document.getElementById('start-date-text'));
+            smartFormatDate(document.getElementById('end-date-text'));
+
+            const startDate = parseDateString(document.getElementById('start-date-text').value);
+            const endDate = parseDateString(document.getElementById('end-date-text').value);
+
+            if (!startDate || !endDate || endDate < startDate) {
+                errorBox.innerText = (!startDate || !endDate) ? "* ရက်စွဲပုံစံ မမှန်ပါ။" : "* ရက်စွဲ ရှေ့နောက် မှားနေပါသည်။";
+                errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
+            }
+            errorBox.classList.add('hidden');
+
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const dayOption = document.querySelector('input[name="day-option"]:checked').value;
+
+            let mDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+            let dDiff = endDate.getDate() - startDate.getDate();
+            if (dDiff < 0) { mDiff--; dDiff += new Date(endDate.getFullYear(), endDate.getMonth(), 0).getDate(); }
+
+            let durationString = `${mDiff > 0 ? mDiff + ' လ ' : ''}${dDiff > 0 ? dDiff + ' ရက်' : ''}`;
+            if (mDiff === 0 && dDiff === 0) durationString = "၀ ရက် (ယနေ့)";
+
+            const mInterest = principal * (rate / 100);
+            let totalInterest = 0;
+
+            if (dayOption === 'exact') {
+                totalInterest = (mInterest * mDiff) + ((mInterest / 30) * dDiff);
+            } else if (dayOption === 'half-month') {
+                totalInterest = mInterest * (mDiff + (dDiff > 0 && dDiff <= 15 ? 0.5 : (dDiff > 15 ? 1 : 0)));
+            } else if (dayOption === 'full-month') {
+                totalInterest = mInterest * (mDiff + (dDiff > 0 ? 1 : 0));
+            }
+
+            document.getElementById('duration-text').innerText = durationString;
+            document.getElementById('monthly-interest').innerText = mInterest.toLocaleString() + " ကျပ်";
+            document.getElementById('total-interest').innerText = Math.round(totalInterest).toLocaleString() + " ကျပ်";
+            document.getElementById('grand-total').innerText = Math.round(principal + totalInterest).toLocaleString() + " ကျပ်";
+            resultBox.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "Interest Calculator Mobile",
+  "short_name": "အတိုးတွက်စနစ်",
+  "description": "ရက်စွဲအလိုက် အတိုးတွက်ချက်စနစ် မိုဘိုင်းဗားရှင်း",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2643/2643444.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
