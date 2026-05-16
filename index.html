@@ -19,6 +19,19 @@
             padding-left: max(1rem, env(safe-area-inset-left));
             padding-right: max(1rem, env(safe-area-inset-right));
         }
+        /* Hide default calendar icon to keep clean UI or overlay natively */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center">
@@ -41,12 +54,41 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
-                <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="နေ့လခုနှစ် (ဥပမာ - 2542025)">
+                <div class="relative">
+                    <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg pr-12" placeholder="နေ့လခုနှစ် (ဥပမာ - 2542025)">
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center">
+                        <span class="text-xl pointer-events-none mr-1">📅</span>
+                        <input type="date" id="start-date-picker" onchange="syncPickerToText('start-date-picker', 'start-date-text')" class="absolute opacity-0 w-8 h-8 cursor-pointer right-0">
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">လာရောက်ရွေးယူသည့် ရက်စွဲ</label>
-                <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="နေ့လခုနှစ် (ဥပမာ - 2512026)">
+            <div class="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 space-y-3">
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-700">လာရောက်ရွေးယူမည့် ပုံစံ</label>
+                    <div class="flex space-x-4 text-xs font-bold">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="end-date-type" value="date" checked onchange="toggleEndInputType()" class="text-indigo-600 mr-1"> ရက်စွဲဖြင့်
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="end-date-type" value="duration" onchange="toggleEndInputType()" class="text-indigo-600 mr-1"> လအရေအတွက်ဖြင့်
+                        </label>
+                    </div>
+                </div>
+
+                <div id="end-date-input-container">
+                    <div class="relative">
+                        <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg pr-12" placeholder="နေ့လခုနှစ် (ဥပမာ - 2512026)">
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center">
+                            <span class="text-xl pointer-events-none mr-1">📅</span>
+                            <input type="date" id="end-date-picker" onchange="syncPickerToText('end-date-picker', 'end-date-text')" class="absolute opacity-0 w-8 h-8 cursor-pointer right-0">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="end-duration-input-container" class="hidden">
+                    <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ထားရှိမည့် လအရေအတွက် (ဥပမာ - 6)">
+                </div>
             </div>
 
             <button onclick="toggleOptions()" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 focus:outline-none flex items-center py-1">
@@ -97,11 +139,74 @@
             document.getElementById('options-container').classList.toggle('hidden');
         }
 
+        function toggleEndInputType() {
+            const type = document.querySelector('input[name="end-date-type"]:checked').value;
+            const dateContainer = document.getElementById('end-date-input-container');
+            const durationContainer = document.getElementById('end-duration-input-container');
+            
+            if (type === 'date') {
+                dateContainer.classList.remove('hidden');
+                durationContainer.classList.add('hidden');
+            } else {
+                dateContainer.classList.add('hidden');
+                durationContainer.classList.remove('hidden');
+                calculateEndDateFromMonths();
+            }
+        }
+
+        function syncPickerToText(pickerId, textId) {
+            const picker = document.getElementById(pickerId);
+            const textInput = document.getElementById(textId);
+            if (picker.value) {
+                const [year, month, day] = picker.value.split('-');
+                textInput.value = `${day}-${month}-${year}`;
+                
+                // If start date changes and month duration mode is active, recalculate end date
+                if (textId === 'start-date-text' && document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
+                    calculateEndDateFromMonths();
+                }
+            }
+        }
+
+        function calculateEndDateFromMonths() {
+            const startText = document.getElementById('start-date-text');
+            smartFormatDate(startText);
+            const startDate = parseDateString(startText.value);
+            const monthsInput = document.getElementById('duration-months').value;
+            const months = parseInt(monthsInput, 10);
+
+            if (!startDate || isNaN(months) || months <= 0) {
+                document.getElementById('end-date-text').value = '';
+                document.getElementById('end-date-picker').value = '';
+                return;
+            }
+
+            // Calculate future date based on months
+            let futureDate = new Date(startDate.getTime());
+            futureDate.setMonth(futureDate.getMonth() + months);
+            
+            // Handle edge cases (e.g., Jan 31 + 1 month becomes Feb 28/29)
+            if (futureDate.getDate() !== startDate.getDate()) {
+                futureDate.setDate(0);
+            }
+
+            const d = String(futureDate.getDate()).padStart(2, '0');
+            const m = String(futureDate.getMonth() + 1).padStart(2, '0');
+            const y = futureDate.getFullYear();
+
+            // Set values to hidden/background date elements
+            document.getElementById('end-date-text').value = `${d}-${m}-${y}`;
+            document.getElementById('end-date-picker').value = `${y}-${m}-${d}`;
+        }
+
         function clearAllFields() {
             document.getElementById('principal').value = '';
             document.getElementById('rate').value = '';
             document.getElementById('start-date-text').value = '';
+            document.getElementById('start-date-picker').value = '';
             document.getElementById('end-date-text').value = '';
+            document.getElementById('end-date-picker').value = '';
+            document.getElementById('duration-months').value = '';
             document.getElementById('error-box').classList.add('hidden');
             document.getElementById('result-box').classList.add('hidden');
         }
@@ -142,6 +247,11 @@
             if(!pInput || !rInput) {
                 errorBox.innerText = "* အချက်အလက်များ အပြည့်အစုံထည့်ပါ။";
                 errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
+            }
+
+            // If user is using month input duration mode, update end date text beforehand
+            if (document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
+                calculateEndDateFromMonths();
             }
 
             smartFormatDate(document.getElementById('start-date-text'));
