@@ -19,7 +19,6 @@
             padding-left: max(1rem, env(safe-area-inset-left));
             padding-right: max(1rem, env(safe-area-inset-right));
         }
-        /* Hide default calendar icon to keep clean UI or overlay natively */
         input[type="date"]::-webkit-calendar-picker-indicator {
             background: transparent;
             bottom: 0;
@@ -42,6 +41,11 @@
         </div>
 
         <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-indigo-600 mb-1">စာဖြင့်ရိုက်ထည့်ရန် (ဥပမာ - ၁၅သိန်း၄သောင်း)</label>
+                <input type="text" id="principal-text-input" oninput="convertMyanmarTextToNumber(this.value)" class="w-full px-4 py-2.5 bg-indigo-50/40 border border-indigo-200 rounded-xl font-medium outline-none focus:ring-2 focus:ring-indigo-500 text-base" placeholder="ဆယ်သိန်း / 5သိန်း၁သောင်း">
+            </div>
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">ချေးငွေ / အရင်းပမာဏ (ကျပ်)</label>
                 <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ဥပမာ - 300000">
@@ -119,10 +123,34 @@
         <div id="error-box" class="text-red-500 text-sm text-center font-medium hidden mt-4"></div>
 
         <div id="result-box" class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 hidden mt-6 space-y-3">
-            <div class="flex justify-between text-sm"><span class="text-gray-600">ကြာမြင့်ချိန် ကာလ:</span><span id="duration-text" class="font-bold text-gray-800">-</span></div>
-            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600">၁ လစာ အတိုးနှုန်း:</span><span id="monthly-interest" class="font-semibold text-gray-700">-</span></div>
-            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600">စုစုပေါင်း ကျသင့်အတိုး:</span><span id="total-interest" class="font-bold text-indigo-600 text-xl">-</span></div>
-            <div class="flex justify-between text-sm border-t border-indigo-100/50 pt-2"><span class="text-gray-600 font-medium">စုစုပေါင်း (အရင်း + အတိုး):</span><span id="grand-total" class="font-extrabold text-emerald-600 text-2xl">-</span></div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-600">ကြာမြင့်ချိန် ကာလ:</span>
+                <span id="duration-text" class="font-bold text-gray-800">-</span>
+            </div>
+            
+            <div class="border-t border-indigo-100/50 pt-2 text-right">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600 text-left">၁ လစာ အတိုးနှုန်း:</span>
+                    <span id="monthly-interest" class="font-semibold text-gray-700">-</span>
+                </div>
+                <div id="monthly-interest-text-mm" class="text-xs text-gray-500 font-medium mt-0.5">-</div>
+            </div>
+            
+            <div class="border-t border-indigo-100/50 pt-2 text-right">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600 text-left">စုစုပေါင်း ကျသင့်အတိုး:</span>
+                    <span id="total-interest" class="font-bold text-indigo-600 text-xl">-</span>
+                </div>
+                <div id="total-interest-text-mm" class="text-xs text-indigo-500 font-semibold mt-0.5">-</div>
+            </div>
+            
+            <div class="border-t border-indigo-100/50 pt-2 text-right">
+                <div class="flex justify-between text-sm items-center">
+                    <span class="text-gray-600 font-medium text-left">စုစုပေါင်း (အရင်း + အတိုး):</span>
+                    <span id="grand-total" class="font-extrabold text-emerald-600 text-2xl">-</span>
+                </div>
+                <div id="grand-total-text-mm" class="text-xs text-emerald-600 font-bold mt-0.5">-</div>
+            </div>
         </div>
     </div>
 
@@ -134,6 +162,176 @@
                 });
             }
         };
+
+        // Text parsing logic for Myanmar words to numerical value mappings
+        function convertMyanmarTextToNumber(inputText) {
+            if (!inputText.trim()) {
+                document.getElementById('principal').value = '';
+                return;
+            }
+
+            let text = inputText.toLowerCase().replace(/\s+/g, '');
+
+            const myanDigits = {'၀':'0','၁':'1','၂':'2','၃':'3','၄':'4','၅':'5','၆':'6','၇':'7','၈':'8','၉':'9'};
+            for (let mDigit in myanDigits) {
+                text = text.split(mDigit).join(myanDigits[mDigit]);
+            }
+
+            const wordsMap = {
+                'တစ်': 1, 'တ': 1, 'နှစ်': 2, 'နှ': 2, 'သုံး': 3, 'လေး': 4, 'ငါး': 5,
+                'ခြောက်': 6, 'ခုနစ်': 7, 'ခုနှစ်': 7, 'ရှစ်': 8, 'ကိုး': 9, 'ဆယ်': 10
+            };
+
+            function parseSegment(segmentStr) {
+                if (!segmentStr) return 0;
+                if (/^\d+$/.test(segmentStr)) {
+                    return parseInt(segmentStr, 10);
+                }
+                if (wordsMap[segmentStr] !== undefined) {
+                    return wordsMap[segmentStr];
+                }
+                let currentVal = 0;
+                let remaining = segmentStr;
+
+                if (remaining.includes('ဆယ်')) {
+                    let parts = remaining.split('ဆယ်');
+                    let prefixVal = parts[0] ? (wordsMap[parts[0]] || parseInt(parts[0], 10) || 1) : 1;
+                    let suffixVal = parts[1] ? (wordsMap[parts[1]] || parseInt(parts[1], 10) || 0) : 0;
+                    return (prefixVal * 10) + suffixVal;
+                }
+                return parseInt(remaining, 10) || 0;
+            }
+
+            let totalAmount = 0;
+            let target = text;
+
+            if (target.includes('သန်း')) {
+                let chunks = target.split('သန်း');
+                let chunkVal = chunks[0].trim();
+                let multiplier = 1;
+
+                if (chunkVal.includes('သိန်း')) {
+                    let subChunks = chunkVal.split('သိန်း');
+                    let lakhCount = subChunks[0] ? (wordsMap[subChunks[0]] || parseInt(subChunks[0], 10) || 1) : 1;
+                    if (subChunks[1]) {
+                        lakhCount = (lakhCount * 100) + parseSegment(subChunks[1]); 
+                    } else {
+                        lakhCount = lakhCount * 100;
+                    }
+                    multiplier = lakhCount * 100000;
+                    totalAmount += multiplier;
+                } else {
+                    let textAmount = wordsMap[chunkVal] || parseInt(chunkVal, 10) || 0;
+                    totalAmount += textAmount * 1000000;
+                }
+                target = chunks[1] || '';
+            }
+
+            if (target.includes('သိန်း')) {
+                let chunks = target.split('သိန်း');
+                let chunkVal = chunks[0].trim();
+                
+                let baseAmount = 1;
+                if (chunkVal.endsWith('ထောင်')) {
+                    let prefix = chunkVal.replace('ထောင်','');
+                    baseAmount = (wordsMap[prefix] || parseInt(prefix, 10) || 1) * 1000;
+                } else if (chunkVal.endsWith('ရာ')) {
+                    let prefix = chunkVal.replace('ရာ','');
+                    baseAmount = (wordsMap[prefix] || parseInt(prefix, 10) || 1) * 100;
+                } else if (chunkVal.includes('ဆယ်')) {
+                    baseAmount = parseSegment(chunkVal);
+                } else {
+                    baseAmount = wordsMap[chunkVal] || parseInt(chunkVal, 10) || (chunkVal === '' ? 1 : 0);
+                }
+
+                totalAmount += baseAmount * 100000;
+                target = chunks[1] || '';
+            }
+
+            if (target.includes('သောင်း')) {
+                let chunks = target.split('သောင်း');
+                let chunkVal = chunks[0].trim();
+                let baseAmount = wordsMap[chunkVal] || parseSegment(chunkVal) || (chunkVal === '' ? 1 : 0);
+                totalAmount += baseAmount * 10000;
+                target = chunks[1] || '';
+            }
+
+            if (target.includes('ထောင်')) {
+                let chunks = target.split('ထောင်');
+                let chunkVal = chunks[0].trim();
+                let baseAmount = wordsMap[chunkVal] || parseSegment(chunkVal) || (chunkVal === '' ? 1 : 0);
+                totalAmount += baseAmount * 1000;
+                target = chunks[1] || '';
+            }
+
+            if (target.includes('ရာ')) {
+                let chunks = target.split('ရာ');
+                let chunkVal = chunks[0].trim();
+                let baseAmount = wordsMap[chunkVal] || parseSegment(chunkVal) || (chunkVal === '' ? 1 : 0);
+                totalAmount += baseAmount * 100;
+                target = chunks[1] || '';
+            }
+
+            if (target) {
+                totalAmount += parseSegment(target);
+            }
+
+            if (totalAmount > 0) {
+                document.getElementById('principal').value = totalAmount;
+            } else {
+                let pureNum = text.replace(/\D/g, '');
+                if (pureNum) {
+                    document.getElementById('principal').value = pureNum;
+                }
+            }
+        }
+
+        // Helper function to turn raw numbers back into readable structured Burmese Text outputs
+        function formatNumberToMyanmarWords(num) {
+            num = Math.round(num);
+            if (num === 0) return "၀ ကျပ်";
+
+            let result = "";
+            let remaining = num;
+
+            const units = [
+                { value: 10000000, label: "ကုဋေ" }, // Kept for logic safety framework handling
+                { value: 1000000, label: "သန်း" },
+                { value: 100000, label: "သိန်း" },
+                { value: 10000, label: "သောင်း" },
+                { value: 1000, label: "ထောင်" },
+                { value: 100, label: "ရာ" },
+                { value: 10, label: "ဆယ်" }
+            ];
+
+            // Special evaluation block for simplified higher lakh limits representations
+            if (remaining >= 100000) {
+                let lakhs = Math.floor(remaining / 100000);
+                result += convertToMyanmarDigits(lakhs) + " သိန်း ";
+                remaining %= 100000;
+            }
+
+            for (let unit of units) {
+                if (unit.label === "သန်း" || unit.label === "ကုဋေ" || unit.label === "သိန်း") continue; 
+                
+                if (remaining >= unit.value) {
+                    let count = Math.floor(remaining / unit.value);
+                    result += convertToMyanmarDigits(count) + " " + unit.label + " ";
+                    remaining %= unit.value;
+                }
+            }
+
+            if (remaining > 0) {
+                result += convertToMyanmarDigits(remaining);
+            }
+
+            return result.trim() + " ကျပ်";
+        }
+
+        function convertToMyanmarDigits(num) {
+            const myanDigits = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
+            return num.toString().split('').map(d => myanDigits[parseInt(d, 10)] || d).join('');
+        }
 
         function toggleOptions() {
             document.getElementById('options-container').classList.toggle('hidden');
@@ -161,7 +359,6 @@
                 const [year, month, day] = picker.value.split('-');
                 textInput.value = `${day}-${month}-${year}`;
                 
-                // If start date changes and month duration mode is active, recalculate end date
                 if (textId === 'start-date-text' && document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
                     calculateEndDateFromMonths();
                 }
@@ -181,11 +378,9 @@
                 return;
             }
 
-            // Calculate future date based on months
             let futureDate = new Date(startDate.getTime());
             futureDate.setMonth(futureDate.getMonth() + months);
             
-            // Handle edge cases (e.g., Jan 31 + 1 month becomes Feb 28/29)
             if (futureDate.getDate() !== startDate.getDate()) {
                 futureDate.setDate(0);
             }
@@ -194,12 +389,12 @@
             const m = String(futureDate.getMonth() + 1).padStart(2, '0');
             const y = futureDate.getFullYear();
 
-            // Set values to hidden/background date elements
             document.getElementById('end-date-text').value = `${d}-${m}-${y}`;
             document.getElementById('end-date-picker').value = `${y}-${m}-${d}`;
         }
 
         function clearAllFields() {
+            document.getElementById('principal-text-input').value = '';
             document.getElementById('principal').value = '';
             document.getElementById('rate').value = '';
             document.getElementById('start-date-text').value = '';
@@ -249,7 +444,6 @@
                 errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
             }
 
-            // If user is using month input duration mode, update end date text beforehand
             if (document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
                 calculateEndDateFromMonths();
             }
@@ -288,10 +482,17 @@
                 totalInterest = mInterest * (mDiff + (dDiff > 0 ? 1 : 0));
             }
 
+            // Setting basic numerical display properties
             document.getElementById('duration-text').innerText = durationString;
             document.getElementById('monthly-interest').innerText = mInterest.toLocaleString() + " ကျပ်";
             document.getElementById('total-interest').innerText = Math.round(totalInterest).toLocaleString() + " ကျပ်";
             document.getElementById('grand-total').innerText = Math.round(principal + totalInterest).toLocaleString() + " ကျပ်";
+            
+            // Assigning computed Burmese text definitions down below values elements
+            document.getElementById('monthly-interest-text-mm').innerText = formatNumberToMyanmarWords(mInterest);
+            document.getElementById('total-interest-text-mm').innerText = formatNumberToMyanmarWords(totalInterest);
+            document.getElementById('grand-total-text-mm').innerText = formatNumberToMyanmarWords(principal + totalInterest);
+
             resultBox.classList.remove('hidden');
         }
     </script>
