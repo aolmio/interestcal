@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>အတိုးတွက်စနစ်</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link class="pwa-manifest" rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,11 +13,8 @@
     <style>
         body { 
             font-family: 'Inter', 'Padauk', sans-serif; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-            padding-top: max(1rem, env(safe-area-inset-top));
-            padding-bottom: max(1rem, env(safe-area-inset-bottom));
-            padding-left: max(1rem, env(safe-area-inset-left));
-            padding-right: max(1rem, env(safe-area-inset-right));
+            background: #f3f4f6;
+            -webkit-tap-highlight-color: transparent;
         }
         input[type="date"]::-webkit-calendar-picker-indicator {
             background: transparent;
@@ -31,125 +28,171 @@
             top: 0;
             width: auto;
         }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        input::placeholder {
+            color: #9ca3af;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
 
-    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 my-auto">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-1">အတိုးတွက်စနစ်</h1>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-indigo-600 mb-1">စာဖြင့်ရိုက်ထည့်ရန် (ဥပမာ - ၁၅သိန်း၄သောင်း)</label>
-                <input type="text" id="principal-text-input" oninput="convertMyanmarTextToNumber(this.value)" class="w-full px-4 py-2.5 bg-indigo-50/40 border border-indigo-200 rounded-xl font-medium outline-none focus:ring-2 focus:ring-indigo-500 text-base" placeholder="ဆယ်သိန်း / 5သိန်း၁သောင်း">
+    <main class="glass-panel w-full max-w-lg md:max-w-2xl lg:max-w-3xl rounded-[2rem] shadow-xl border border-white/50 overflow-hidden flex flex-col transition-all duration-300">
+        
+        <header class="bg-indigo-600 px-6 py-8 md:py-10 text-center rounded-b-[2rem] shadow-sm relative z-10">
+            <div class="w-12 h-12 md:w-16 md:h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 backdrop-blur-md">
+                <svg class="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
             </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white tracking-wide">အတိုးတွက်စနစ်</h1>
+        </header>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">ချေးငွေ / အရင်းပမာဏ (ကျပ်)</label>
-                <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ဥပမာ - 300000">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">အတိုးနှုန်း (ကျပ်)</label>
-                <input type="text" id="rate" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ဥပမာ - 3">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
-                <div class="relative">
-                    <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg pr-12" placeholder="နေ့လခုနှစ် (ဥပမာ - 2542025)">
-                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center">
-                        <span class="text-xl pointer-events-none mr-1">📅</span>
-                        <input type="date" id="start-date-picker" onchange="syncPickerToText('start-date-picker', 'start-date-text')" class="absolute opacity-0 w-8 h-8 cursor-pointer right-0">
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 space-y-3">
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-700">လာရောက်ရွေးယူမည့် ပုံစံ</label>
-                    <div class="flex space-x-4 text-xs font-bold">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="end-date-type" value="date" checked onchange="toggleEndInputType()" class="text-indigo-600 mr-1"> ရက်စွဲဖြင့်
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="end-date-type" value="duration" onchange="toggleEndInputType()" class="text-indigo-600 mr-1"> လအရေအတွက်ဖြင့်
-                        </label>
-                    </div>
-                </div>
-
-                <div id="end-date-input-container">
+        <section class="p-6 sm:p-8 md:p-10 space-y-6 md:space-y-8">
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm md:text-base font-semibold text-gray-700 mb-2 ml-1">စာဖြင့်ရိုက်ထည့်ရန် (ဥပမာ - ၁၅သိန်း၄သောင်း)</label>
                     <div class="relative">
-                        <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg pr-12" placeholder="နေ့လခုနှစ် (ဥပမာ - 2512026)">
-                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center">
-                            <span class="text-xl pointer-events-none mr-1">📅</span>
-                            <input type="date" id="end-date-picker" onchange="syncPickerToText('end-date-picker', 'end-date-text')" class="absolute opacity-0 w-8 h-8 cursor-pointer right-0">
+                        <input type="text" id="principal-text-input" oninput="convertMyanmarTextToNumber(this.value)" class="w-full pl-4 pr-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm md:text-base outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800" placeholder="ဆယ်သိန်း / 5သိန်း၁သောင်း">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-2 ml-1">အရင်းပမာဏ</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-gray-400 font-medium text-lg pr-2 border-r border-gray-200">K</span>
+                            </div>
+                            <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full pl-14 pr-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg md:text-xl tracking-wide" placeholder="ဂဏန်းဖြင့် (ဥပမာ - 300000)">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-2 ml-1">အတိုးနှုန်း (ကျပ်)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            </div>
+                            <input type="text" id="rate" inputmode="numeric" pattern="[0-9]*" class="w-full pl-12 pr-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg md:text-xl" placeholder="ဥပမာ - 3">
                         </div>
                     </div>
                 </div>
 
-                <div id="end-duration-input-container" class="hidden">
-                    <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 text-lg" placeholder="ထားရှိမည့် လအရေအတွက် (ဥပမာ - 6)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                    <div>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-2 ml-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
+                        <div class="relative">
+                            <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg md:text-xl pr-12" placeholder="DD-MM-YYYY">
+                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-xl">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <input type="date" id="start-date-picker" onchange="syncPickerToText('start-date-picker', 'start-date-text')" class="absolute opacity-0 inset-0 cursor-pointer w-full h-full">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <div class="bg-indigo-50/60 p-1.5 rounded-2xl flex border border-indigo-100 h-[46px] md:h-[54px]">
+                            <label class="flex-1 text-center cursor-pointer relative h-full">
+                                <input type="radio" name="end-date-type" value="date" checked onchange="toggleEndInputType()" class="peer hidden">
+                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white peer-checked:shadow-sm font-bold text-gray-500 peer-checked:text-indigo-600 transition-all text-sm md:text-base">ရက်စွဲဖြင့်</div>
+                            </label>
+                            <label class="flex-1 text-center cursor-pointer relative h-full">
+                                <input type="radio" name="end-date-type" value="duration" onchange="toggleEndInputType()" class="peer hidden">
+                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white peer-checked:shadow-sm font-bold text-gray-500 peer-checked:text-indigo-600 transition-all text-sm md:text-base">လအရေအတွက်ဖြင့်</div>
+                            </label>
+                        </div>
+
+                        <div id="end-date-input-container" class="relative">
+                            <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg md:text-xl pr-12" placeholder="ရွေးယူမည့် ရက်စွဲ">
+                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-xl">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <input type="date" id="end-date-picker" onchange="syncPickerToText('end-date-picker', 'end-date-text')" class="absolute opacity-0 inset-0 cursor-pointer w-full h-full">
+                            </div>
+                        </div>
+
+                        <div id="end-duration-input-container" class="hidden">
+                            <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 md:py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg md:text-xl" placeholder="ထားရှိမည့် လ (ဥပမာ - 6)">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <button onclick="toggleOptions()" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 focus:outline-none flex items-center py-1">
-                <span>⚙️ ရက်စွန်းတွက်နည်း ပြောင်းရန်</span>
-            </button>
-
-            <div id="options-container" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
-                <label class="flex items-center text-sm cursor-pointer py-1">
-                    <input type="radio" name="day-option" value="full-month" checked class="h-5 w-5 text-indigo-600">
-                    <span class="ml-3 font-semibold text-gray-700">၁ ရက်စွန်းလျှင် ၁ လစာယူရန် (Default)</span>
-                </label>
-                <label class="flex items-center text-sm cursor-pointer py-1">
-                    <input type="radio" name="day-option" value="exact" class="h-5 w-5 text-indigo-600">
-                    <span class="ml-3 font-semibold text-gray-700">ရက်အလိုက် တိတိကျကျတွက်ရန်</span>
-                </label>
-                <label class="flex items-center text-sm cursor-pointer py-1">
-                    <input type="radio" name="day-option" value="half-month" class="h-5 w-5 text-indigo-600">
-                    <span class="ml-3 font-semibold text-gray-700">လဝက် / ၁လစာ ဖြတ်ရန်</span>
-                </label>
+            <div class="hidden">
+                <input type="radio" name="day-option" value="full-month" checked>
+                <input type="radio" name="day-option" value="exact">
+                <input type="radio" name="day-option" value="half-month">
             </div>
 
-            <div class="grid grid-cols-3 gap-2 mt-2">
-                <button onclick="clearAllFields()" class="col-span-1 py-4 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl border border-red-200 active:scale-95 transition-all text-sm sm:text-base">အကုန်ဖျက်</button>
-                <button onclick="parseAndCalculate()" class="col-span-2 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg active:scale-95 transition-all text-lg">တွက်ချက်မည်</button>
+            <div id="error-box" class="bg-red-50 text-red-600 p-4 rounded-2xl text-sm md:text-base font-semibold hidden text-center border border-red-100 flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="error-message"></span>
             </div>
-        </div>
 
-        <div id="error-box" class="text-red-500 text-sm text-center font-medium hidden mt-4"></div>
-
-        <div id="result-box" class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 hidden mt-6 space-y-3">
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-600">ကြာမြင့်ချိန် ကာလ:</span>
-                <span id="duration-text" class="font-bold text-gray-800">-</span>
+            <div class="grid grid-cols-12 gap-3 pt-4 border-t border-gray-100">
+                <button onclick="clearAllFields()" class="col-span-4 md:col-span-3 py-4 md:py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center space-x-1.5 text-sm md:text-base">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>ဖျက်မည်</span>
+                </button>
+                <button onclick="parseAndCalculate()" class="col-span-8 md:col-span-9 py-4 md:py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition-all active:scale-95 text-lg md:text-xl flex items-center justify-center space-x-2">
+                    <span>တွက်ချက်မည်</span>
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
             </div>
             
-            <div class="border-t border-indigo-100/50 pt-2 text-right">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600 text-left">၁ လစာ အတိုးနှုန်း:</span>
-                    <span id="monthly-interest" class="font-semibold text-gray-700">-</span>
+        </section>
+    </main>
+
+    <div id="result-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 sm:p-6 bg-gray-900/40 backdrop-blur-sm">
+        <div class="bg-white rounded-[2rem] w-full max-w-md md:max-w-2xl overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-5 md:py-6 text-center relative shrink-0">
+                <h2 class="text-white font-bold text-xl md:text-2xl">တွက်ချက်မှု ရလဒ်</h2>
+                <button onclick="closeModal()" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6 md:p-8 space-y-5 md:space-y-6 overflow-y-auto shrink">
+                
+                <div class="flex flex-col space-y-1 pb-4 md:pb-5 border-b border-gray-100">
+                    <span class="text-sm md:text-base font-semibold text-gray-500">ကြာမြင့်ချိန် ကာလ</span>
+                    <span id="duration-text" class="font-bold text-gray-900 text-lg md:text-xl"></span>
                 </div>
-                <div id="monthly-interest-text-mm" class="text-xs text-gray-500 font-medium mt-0.5">-</div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 pb-4 md:pb-5 border-b border-gray-100">
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-sm md:text-base font-semibold text-gray-500">အရင်းပမာဏ</span>
+                        <span id="principal-display" class="font-bold text-gray-800 text-lg md:text-xl"></span>
+                        <span id="principal-text-mm" class="text-xs md:text-sm font-medium text-indigo-500 mt-1 bg-indigo-50 inline-block px-2 py-1 rounded-md w-fit"></span>
+                    </div>
+
+                    <div class="flex flex-col space-y-1 pt-4 md:pt-0 border-t border-gray-100 md:border-t-0">
+                        <span class="text-sm md:text-base font-semibold text-gray-500">၁ လစာ အတိုးနှုန်း</span>
+                        <span id="monthly-interest" class="font-bold text-gray-800 text-lg md:text-xl"></span>
+                        <span id="monthly-interest-text-mm" class="text-xs md:text-sm font-medium text-indigo-500 mt-1 bg-indigo-50 inline-block px-2 py-1 rounded-md w-fit"></span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-1 pb-4 md:pb-5 border-b border-gray-100">
+                    <span class="text-sm md:text-base font-semibold text-gray-500">စုစုပေါင်း ကျသင့်အတိုး</span>
+                    <span id="total-interest" class="font-extrabold text-indigo-600 text-2xl md:text-3xl tracking-tight"></span>
+                    <span id="total-interest-text-mm" class="text-xs md:text-sm font-medium text-indigo-500 mt-1 bg-indigo-50 inline-block px-2 py-1 rounded-md w-fit"></span>
+                </div>
+
+                <div class="flex flex-col space-y-1 bg-emerald-50 p-5 md:p-6 rounded-2xl border border-emerald-100">
+                    <span class="text-sm md:text-base font-bold text-emerald-700">စုစုပေါင်း (အရင်း + အတိုး)</span>
+                    <span id="grand-total" class="font-extrabold text-emerald-600 text-3xl md:text-4xl tracking-tight"></span>
+                    <span id="grand-total-text-mm" class="text-sm md:text-base font-bold text-emerald-600 mt-1.5 opacity-90"></span>
+                </div>
+
             </div>
             
-            <div class="border-t border-indigo-100/50 pt-2 text-right">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600 text-left">စုစုပေါင်း ကျသင့်အတိုး:</span>
-                    <span id="total-interest" class="font-bold text-indigo-600 text-xl">-</span>
-                </div>
-                <div id="total-interest-text-mm" class="text-xs text-indigo-500 font-semibold mt-0.5">-</div>
-            </div>
-            
-            <div class="border-t border-indigo-100/50 pt-2 text-right">
-                <div class="flex justify-between text-sm items-center">
-                    <span class="text-gray-600 font-medium text-left">စုစုပေါင်း (အရင်း + အတိုး):</span>
-                    <span id="grand-total" class="font-extrabold text-emerald-600 text-2xl">-</span>
-                </div>
-                <div id="grand-total-text-mm" class="text-xs text-emerald-600 font-bold mt-0.5">-</div>
+            <div class="p-5 md:p-6 bg-gray-50 shrink-0">
+                <button onclick="closeModal()" class="w-full py-4 bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-800 font-bold rounded-2xl transition-all text-lg md:text-xl shadow-sm active:scale-95">အိုကေ၊ ပိတ်မည်</button>
             </div>
         </div>
     </div>
@@ -157,13 +200,10 @@
     <script>
         window.onload = function() { 
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(function(err) {
-                    console.log('Service Worker Registration Failed: ', err);
-                });
+                navigator.serviceWorker.register('sw.js').catch(function(err) {});
             }
         };
 
-        // Text parsing logic for Myanmar words to numerical value mappings
         function convertMyanmarTextToNumber(inputText) {
             if (!inputText.trim()) {
                 document.getElementById('principal').value = '';
@@ -171,7 +211,6 @@
             }
 
             let text = inputText.toLowerCase().replace(/\s+/g, '');
-
             const myanDigits = {'၀':'0','၁':'1','၂':'2','၃':'3','၄':'4','၅':'5','၆':'6','၇':'7','၈':'8','၉':'9'};
             for (let mDigit in myanDigits) {
                 text = text.split(mDigit).join(myanDigits[mDigit]);
@@ -184,15 +223,10 @@
 
             function parseSegment(segmentStr) {
                 if (!segmentStr) return 0;
-                if (/^\d+$/.test(segmentStr)) {
-                    return parseInt(segmentStr, 10);
-                }
-                if (wordsMap[segmentStr] !== undefined) {
-                    return wordsMap[segmentStr];
-                }
-                let currentVal = 0;
+                if (/^\d+$/.test(segmentStr)) return parseInt(segmentStr, 10);
+                if (wordsMap[segmentStr] !== undefined) return wordsMap[segmentStr];
+                
                 let remaining = segmentStr;
-
                 if (remaining.includes('ဆယ်')) {
                     let parts = remaining.split('ဆယ်');
                     let prefixVal = parts[0] ? (wordsMap[parts[0]] || parseInt(parts[0], 10) || 1) : 1;
@@ -230,8 +264,8 @@
             if (target.includes('သိန်း')) {
                 let chunks = target.split('သိန်း');
                 let chunkVal = chunks[0].trim();
-                
                 let baseAmount = 1;
+                
                 if (chunkVal.endsWith('ထောင်')) {
                     let prefix = chunkVal.replace('ထောင်','');
                     baseAmount = (wordsMap[prefix] || parseInt(prefix, 10) || 1) * 1000;
@@ -286,16 +320,14 @@
             }
         }
 
-        // Helper function to turn raw numbers back into readable structured Burmese Text outputs
         function formatNumberToMyanmarWords(num) {
             num = Math.round(num);
             if (num === 0) return "၀ ကျပ်";
 
             let result = "";
             let remaining = num;
-
             const units = [
-                { value: 10000000, label: "ကုဋေ" }, // Kept for logic safety framework handling
+                { value: 10000000, label: "ကုဋေ" },
                 { value: 1000000, label: "သန်း" },
                 { value: 100000, label: "သိန်း" },
                 { value: 10000, label: "သောင်း" },
@@ -304,7 +336,6 @@
                 { value: 10, label: "ဆယ်" }
             ];
 
-            // Special evaluation block for simplified higher lakh limits representations
             if (remaining >= 100000) {
                 let lakhs = Math.floor(remaining / 100000);
                 result += convertToMyanmarDigits(lakhs) + " သိန်း ";
@@ -313,7 +344,6 @@
 
             for (let unit of units) {
                 if (unit.label === "သန်း" || unit.label === "ကုဋေ" || unit.label === "သိန်း") continue; 
-                
                 if (remaining >= unit.value) {
                     let count = Math.floor(remaining / unit.value);
                     result += convertToMyanmarDigits(count) + " " + unit.label + " ";
@@ -331,10 +361,6 @@
         function convertToMyanmarDigits(num) {
             const myanDigits = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
             return num.toString().split('').map(d => myanDigits[parseInt(d, 10)] || d).join('');
-        }
-
-        function toggleOptions() {
-            document.getElementById('options-container').classList.toggle('hidden');
         }
 
         function toggleEndInputType() {
@@ -403,7 +429,6 @@
             document.getElementById('end-date-picker').value = '';
             document.getElementById('duration-months').value = '';
             document.getElementById('error-box').classList.add('hidden');
-            document.getElementById('result-box').classList.add('hidden');
         }
 
         function smartFormatDate(input) {
@@ -432,16 +457,39 @@
             return (dateObj.getFullYear() === y && dateObj.getMonth() === m && dateObj.getDate() === d) ? dateObj : null;
         }
 
+        function openModal() {
+            const modal = document.getElementById('result-modal');
+            const modalInner = modal.querySelector('div');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalInner.classList.remove('scale-95');
+                modalInner.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('result-modal');
+            const modalInner = modal.querySelector('div');
+            modal.classList.add('opacity-0');
+            modalInner.classList.remove('scale-100');
+            modalInner.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
         function parseAndCalculate() {
             const errorBox = document.getElementById('error-box');
-            const resultBox = document.getElementById('result-box');
+            const errorMessage = document.getElementById('error-message');
             
             const pInput = document.getElementById('principal').value;
             const rInput = document.getElementById('rate').value;
             
             if(!pInput || !rInput) {
-                errorBox.innerText = "* အချက်အလက်များ အပြည့်အစုံထည့်ပါ။";
-                errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
+                errorMessage.innerText = "အချက်အလက်များ အပြည့်အစုံထည့်ပါ။";
+                errorBox.classList.remove('hidden');
+                return;
             }
 
             if (document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
@@ -455,8 +503,9 @@
             const endDate = parseDateString(document.getElementById('end-date-text').value);
 
             if (!startDate || !endDate || endDate < startDate) {
-                errorBox.innerText = (!startDate || !endDate) ? "* ရက်စွဲပုံစံ မမှန်ပါ။" : "* ရက်စွဲ ရှေ့နောက် မှားနေပါသည်။";
-                errorBox.classList.remove('hidden'); resultBox.classList.add('hidden'); return;
+                errorMessage.innerText = (!startDate || !endDate) ? "ရက်စွဲပုံစံ မမှန်ပါ။" : "ရက်စွဲ ရှေ့နောက် မှားနေပါသည်။";
+                errorBox.classList.remove('hidden'); 
+                return;
             }
             errorBox.classList.add('hidden');
 
@@ -482,18 +531,22 @@
                 totalInterest = mInterest * (mDiff + (dDiff > 0 ? 1 : 0));
             }
 
-            // Setting basic numerical display properties
             document.getElementById('duration-text').innerText = durationString;
+            
+            // Set Principal Values
+            document.getElementById('principal-display').innerText = principal.toLocaleString() + " ကျပ်";
+            document.getElementById('principal-text-mm').innerText = formatNumberToMyanmarWords(principal);
+            
+            // Set Interest & Totals
             document.getElementById('monthly-interest').innerText = mInterest.toLocaleString() + " ကျပ်";
             document.getElementById('total-interest').innerText = Math.round(totalInterest).toLocaleString() + " ကျပ်";
             document.getElementById('grand-total').innerText = Math.round(principal + totalInterest).toLocaleString() + " ကျပ်";
             
-            // Assigning computed Burmese text definitions down below values elements
             document.getElementById('monthly-interest-text-mm').innerText = formatNumberToMyanmarWords(mInterest);
             document.getElementById('total-interest-text-mm').innerText = formatNumberToMyanmarWords(totalInterest);
             document.getElementById('grand-total-text-mm').innerText = formatNumberToMyanmarWords(principal + totalInterest);
 
-            resultBox.classList.remove('hidden');
+            openModal();
         }
     </script>
 </body>
