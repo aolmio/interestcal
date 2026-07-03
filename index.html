@@ -41,16 +41,18 @@
 
     <main class="glass-panel w-full max-w-lg md:max-w-2xl lg:max-w-3xl rounded-[2rem] shadow-xl border border-white/50 overflow-hidden flex flex-col transition-all duration-300">
         
-        <header class="bg-indigo-600 px-4 py-3.5 md:py-4 flex items-center justify-center space-x-2.5 rounded-b-[1.5rem] shadow-sm relative z-10">
-            <div class="w-8 h-8 md:w-9 md:h-9 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                <svg class="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+        <header class="bg-indigo-600 px-4 py-3 flex flex-col items-center justify-center rounded-b-[1.5rem] shadow-sm relative z-10">
+            <div class="flex bg-indigo-800/50 p-1 rounded-xl w-full max-w-xs">
+                <button onclick="switchTab('interest-tab')" id="tab-btn-interest" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all">
+                    အတိုးတွက်ရန်
+                </button>
+                <button onclick="switchTab('calc-tab')" id="tab-btn-calc" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
+                    ဂဏန်းတွက်စက်
+                </button>
             </div>
-            <h1 class="text-lg md:text-xl font-bold text-white tracking-wide">အတိုးတွက်စနစ်</h1>
         </header>
 
-        <section class="p-6 sm:p-8 md:p-10 space-y-5 md:space-y-6">
+        <section id="interest-tab" class="p-6 sm:p-8 md:p-10 space-y-5 md:space-y-6">
             
             <div class="space-y-5">
                 <div>
@@ -114,8 +116,15 @@
                             </div>
                         </div>
 
-                        <div id="end-duration-input-container" class="hidden">
-                            <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ထားရှိမည့် လ (ဥပမာ - 6)">
+                        <div id="end-duration-input-container" class="hidden grid grid-cols-2 gap-3">
+                            <div class="relative">
+                                <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ထားရှိမည့် လ">
+                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">လ</span>
+                            </div>
+                            <div class="relative">
+                                <input type="text" id="duration-days" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ထားရှိမည့် ရက်">
+                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">ရက်</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -172,50 +181,103 @@
             </div>
             
         </section>
+
+        <section id="calc-tab" class="hidden p-6 sm:p-8 md:p-10 space-y-5">
+            <div class="relative bg-gray-100 rounded-3xl p-5 border border-gray-200">
+                <div class="flex items-center justify-between space-x-2 mb-2">
+                    <button onclick="pasteToCalculator()" class="text-xs bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        <span>Paste</span>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyFromCalculator()" class="text-xs bg-gray-50 border border-gray-200 hover:bg-gray-200 text-gray-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            <span>Copy</span>
+                        </button>
+                        <button onclick="useInInterest()" class="text-xs bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            <span>Use in Interest</span>
+                        </button>
+                    </div>
+                </div>
+                <input type="text" id="calc-display" inputmode="decimal" oninput="cleanCalcInput(this)" class="w-full bg-transparent text-right font-bold text-gray-800 text-3xl outline-none tracking-wide" placeholder="0">
+                <div id="calc-history" class="text-right text-gray-400 text-sm h-5 overflow-hidden mt-1 font-semibold pr-1"></div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-3.5">
+                <button onclick="clearCalc()" class="py-5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">C</button>
+                <button onclick="backspaceCalc()" class="py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">⌫</button>
+                
+                <button onclick="inputCalc('%')" class="py-5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-2xl text-xl transition-all active:scale-90">%</button>
+                <button onclick="inputCalc('÷')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">÷</button>
+                <button onclick="inputCalc('×')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">×</button>
+                <button onclick="inputCalc('-')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">-</button>
+                
+                <button onclick="inputCalc('+')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">+</button>
+                <button onclick="evaluateCalc()" class="py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2 shadow-lg shadow-indigo-150">=</button>
+            </div>
+        </section>
     </main>
 
-    <div id="result-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-        <div class="bg-white rounded-[1.5rem] w-full max-w-md overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col">
+    <div id="result-modal" class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300 opacity-0">
+        <div id="result-sheet" class="bg-white w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl transform translate-y-full transition-transform duration-300 flex flex-col max-h-[92vh] sm:max-h-[85vh]">
             
-            <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-5 py-4 flex items-center justify-between shrink-0">
-                <h2 class="text-white font-bold text-lg md:text-xl">တွက်ချက်မှု ရလဒ်</h2>
-                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors">
+            <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mt-3 mb-1 sm:hidden shrink-0"></div>
+
+            <div class="px-5 py-4 flex items-center justify-between shrink-0 border-b border-gray-100">
+                <h2 class="text-gray-800 font-extrabold text-lg md:text-xl">တွက်ချက်မှု ရလဒ်</h2>
+                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <div class="p-5 space-y-4 shrink">
+            <div class="p-5 space-y-4 overflow-y-auto shrink">
                 
-                <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-                    <span class="text-base font-bold text-gray-600">ကြာမြင့်ချိန်ကာလ</span>
+                <div onclick="copyField('duration-text', 'ကြာမြင့်ချိန်ကာလ')" class="flex justify-between items-center pb-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
+                    <span class="text-base font-bold text-gray-600 flex items-center gap-1.5">
+                        ကြာမြင့်ချိန်ကာလ 
+                        <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </span>
                     <span id="duration-text" class="font-extrabold text-gray-900 text-lg"></span>
                 </div>
 
                 <div class="flex flex-row gap-4 pb-3 border-b border-gray-100">
-                    <div class="flex-1">
-                        <span class="block text-sm font-bold text-gray-600 mb-1">အရင်းပမာဏ</span>
+                    <div onclick="copyField('principal-display', 'အရင်းပမာဏ')" class="flex-1 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
+                        <span class="text-sm font-bold text-gray-600 mb-1 flex items-center gap-1.5">
+                            အရင်းပမာဏ
+                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
                         <span id="principal-display" class="block font-extrabold text-gray-900 text-base md:text-lg"></span>
                         <span id="principal-text-mm" class="block text-xs font-semibold text-indigo-600 leading-tight mt-1.5"></span>
                     </div>
                     <div class="w-px bg-gray-200"></div>
-                    <div class="flex-1">
-                        <span class="block text-sm font-bold text-gray-600 mb-1">၁ လစာ အတိုးနှုန်း</span>
+                    <div onclick="copyField('monthly-interest', '၁ လစာ အတိုးနှုန်း')" class="flex-1 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
+                        <span class="text-sm font-bold text-gray-600 mb-1 flex items-center gap-1.5">
+                            ၁ လစာ အတိုးနှုန်း
+                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
                         <span id="monthly-interest" class="block font-extrabold text-gray-900 text-base md:text-lg"></span>
                         <span id="monthly-interest-text-mm" class="block text-xs font-semibold text-indigo-600 leading-tight mt-1.5"></span>
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                <div onclick="copyField('total-interest', 'ကျသင့်အတိုး')" class="flex justify-between items-center pb-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
                     <div>
-                        <span class="block text-base font-bold text-gray-600">ကျသင့်အတိုး</span>
+                        <span class="text-base font-bold text-gray-600 flex items-center gap-1.5">
+                            ကျသင့်အတိုး
+                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
                         <span id="total-interest-text-mm" class="block text-xs font-semibold text-indigo-600 mt-1 max-w-[200px] leading-tight"></span>
                     </div>
                     <span id="total-interest" class="font-black text-indigo-700 text-2xl tracking-tight text-right"></span>
                 </div>
 
-                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between">
+                <div onclick="copyField('grand-total', 'စုစုပေါင်း')" class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:bg-emerald-100/50 transition-all group">
                     <div>
-                        <span class="block text-base font-extrabold text-emerald-800">စုစုပေါင်း (အရင်း+အတိုး)</span>
+                        <span class="text-base font-extrabold text-emerald-800 flex items-center gap-1.5">
+                            စုစုပေါင်း (အရင်း+အတိုး)
+                            <svg class="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
                         <span id="grand-total-text-mm" class="block text-xs font-bold text-emerald-700 mt-1 opacity-90 leading-tight"></span>
                     </div>
                     <span id="grand-total" class="font-black text-emerald-700 text-3xl tracking-tight mt-2 sm:mt-0 text-right"></span>
@@ -223,18 +285,214 @@
 
             </div>
             
-            <div class="px-5 pb-5 pt-2 bg-white shrink-0">
-                <button onclick="closeModal()" class="w-full py-3 bg-gray-50 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 text-gray-800 font-bold rounded-xl transition-all text-base shadow-sm active:scale-95">အိုကေ၊ ပိတ်မည်</button>
+            <div class="px-5 pb-6 pt-2 bg-white shrink-0 flex flex-col gap-2 border-t border-gray-100">
+                <button onclick="closeModal()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all text-base shadow-sm active:scale-95">
+                    အိုကေ၊ ပိတ်မည်
+                </button>
             </div>
         </div>
     </div>
 
+    <div id="paste-modal" class="fixed inset-0 z-[60] hidden bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300">
+            <h3 class="text-gray-800 font-bold text-base mb-3">ဂဏန်းများကို ဤနေရာတွင် ထည့်ပါ (Paste)</h3>
+            <input type="text" id="paste-fallback-input" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-lg font-semibold" placeholder="ဖိပြီး Paste လုပ်ပါ">
+            <div class="flex space-x-3">
+                <button onclick="closePasteModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-sm transition-all">မလုပ်တော့ပါ</button>
+                <button onclick="confirmPasteFallback()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-indigo-150">ထည့်မည်</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notif" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-slate-800 text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-lg opacity-0 pointer-events-none transition-all duration-300 flex items-center space-x-2">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="toast-message"></span>
+    </div>
+
     <script>
+        let activePasteCallback = null;
+
         window.onload = function() { 
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(function(err) {});
             }
         };
+
+        function switchTab(tabId) {
+            const intTab = document.getElementById('interest-tab');
+            const calcTab = document.getElementById('calc-tab');
+            const btnInt = document.getElementById('tab-btn-interest');
+            const btnCalc = document.getElementById('tab-btn-calc');
+
+            if (tabId === 'interest-tab') {
+                intTab.classList.remove('hidden');
+                calcTab.classList.add('hidden');
+                btnInt.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
+                btnCalc.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+            } else {
+                calcTab.classList.remove('hidden');
+                intTab.classList.add('hidden');
+                btnCalc.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
+                btnInt.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notif');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        async function pasteText(callback) {
+            try {
+                if (navigator.clipboard && navigator.clipboard.readText) {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        callback(text);
+                        return;
+                    }
+                }
+            } catch (err) {}
+            
+            activePasteCallback = callback;
+            const modal = document.getElementById('paste-modal');
+            const input = document.getElementById('paste-fallback-input');
+            input.value = '';
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+                modal.querySelector('div').classList.add('scale-100');
+                input.focus();
+            }, 10);
+        }
+
+        function closePasteModal() {
+            const modal = document.getElementById('paste-modal');
+            const modalInner = modal.querySelector('div');
+            modalInner.classList.remove('scale-100');
+            modalInner.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            activePasteCallback = null;
+        }
+
+        function confirmPasteFallback() {
+            const text = document.getElementById('paste-fallback-input').value;
+            if (text && activePasteCallback) {
+                activePasteCallback(text);
+            }
+            closePasteModal();
+        }
+
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast("ကူးယူပြီးပါပြီ။");
+            } catch (err) {
+                showToast("ကူးယူရန် အဆင်မပြေပါ။");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function copyField(elementId, fieldName) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                let text = el.innerText;
+                let textToCopy = text;
+                if (elementId !== 'duration-text') {
+                    textToCopy = text.replace(/[^0-9]/g, '');
+                }
+                copyToClipboard(textToCopy);
+                showToast(fieldName + " (" + textToCopy + ") ကို ကူးယူပြီးပါပြီ။");
+            }
+        }
+
+        function cleanCalcInput(el) {
+            let val = el.value;
+            val = val.replace(/\*/g, '×').replace(/\//g, '÷');
+            el.value = val.replace(/[^0-9.+\-×÷%()]/g, '');
+        }
+
+        function inputCalc(val) {
+            const display = document.getElementById('calc-display');
+            if (display.value === '0') {
+                display.value = val;
+            } else {
+                display.value += val;
+            }
+        }
+
+        function clearCalc() {
+            document.getElementById('calc-display').value = '';
+            document.getElementById('calc-history').innerText = '';
+        }
+
+        function backspaceCalc() {
+            const display = document.getElementById('calc-display');
+            display.value = display.value.slice(0, -1);
+        }
+
+        function evaluateCalc() {
+            const display = document.getElementById('calc-display');
+            const history = document.getElementById('calc-history');
+            let expression = display.value;
+            if (!expression) return;
+            try {
+                history.innerText = expression + ' =';
+                let formattedExpr = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                let result = Function('"use strict";return (' + formattedExpr + ')')();
+                display.value = Number(parseFloat(result).toFixed(4)).toString();
+            } catch (err) {
+                display.value = 'Error';
+            }
+        }
+
+        function pasteToCalculator() {
+            pasteText((text) => {
+                let cleaned = text.replace(/[^0-9.+\-*/%()]/g, '');
+                cleaned = cleaned.replace(/\*/g, '×').replace(/\//g, '÷');
+                if (cleaned) {
+                    const display = document.getElementById('calc-display');
+                    display.value += cleaned;
+                    showToast("Paste လုပ်ပြီးပါပြီ");
+                }
+            });
+        }
+
+        function copyFromCalculator() {
+            const val = document.getElementById('calc-display').value;
+            if (val) {
+                copyToClipboard(val);
+            }
+        }
+
+        function useInInterest() {
+            const val = document.getElementById('calc-display').value;
+            if (val && !isNaN(parseFloat(val))) {
+                document.getElementById('principal').value = Math.round(parseFloat(val));
+                switchTab('interest-tab');
+                showToast("အရင်းပမာဏထဲသို့ ထည့်သွင်းပြီးပါပြီ");
+            } else {
+                showToast("တရားဝင်သော ဂဏန်းမဟုတ်ပါ");
+            }
+        }
 
         function toggleAdvancedOptions() {
             const optionsDiv = document.getElementById('advanced-options');
@@ -437,22 +695,29 @@
 
         function calculateEndDateFromMonths() {
             const startText = document.getElementById('start-date-text');
+            if (!startText.value.trim()) return;
             smartFormatDate(startText);
             const startDate = parseDateString(startText.value);
             const monthsInput = document.getElementById('duration-months').value;
-            const months = parseInt(monthsInput, 10);
+            const daysInput = document.getElementById('duration-days').value;
+            const months = parseInt(monthsInput, 10) || 0;
+            const days = parseInt(daysInput, 10) || 0;
 
-            if (!startDate || isNaN(months) || months <= 0) {
+            if (!startDate || (months === 0 && days === 0)) {
                 document.getElementById('end-date-text').value = '';
                 document.getElementById('end-date-picker').value = '';
                 return;
             }
 
             let futureDate = new Date(startDate.getTime());
-            futureDate.setMonth(futureDate.getMonth() + months);
-            
-            if (futureDate.getDate() !== startDate.getDate()) {
-                futureDate.setDate(0);
+            if (months > 0) {
+                futureDate.setMonth(futureDate.getMonth() + months);
+                if (futureDate.getDate() !== startDate.getDate()) {
+                    futureDate.setDate(0);
+                }
+            }
+            if (days > 0) {
+                futureDate.setDate(futureDate.getDate() + days);
             }
 
             const d = String(futureDate.getDate()).padStart(2, '0');
@@ -472,6 +737,7 @@
             document.getElementById('end-date-text').value = '';
             document.getElementById('end-date-picker').value = '';
             document.getElementById('duration-months').value = '';
+            document.getElementById('duration-days').value = '';
             document.getElementById('error-box').classList.add('hidden');
         }
 
@@ -503,21 +769,23 @@
 
         function openModal() {
             const modal = document.getElementById('result-modal');
-            const modalInner = modal.querySelector('div');
+            const sheet = document.getElementById('result-sheet');
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
-                modalInner.classList.remove('scale-95');
-                modalInner.classList.add('scale-100');
+                modal.classList.add('opacity-100');
+                sheet.classList.remove('translate-y-full');
+                sheet.classList.add('translate-y-0');
             }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('result-modal');
-            const modalInner = modal.querySelector('div');
+            const sheet = document.getElementById('result-sheet');
+            sheet.classList.remove('translate-y-0');
+            sheet.classList.add('translate-y-full');
+            modal.classList.remove('opacity-100');
             modal.classList.add('opacity-0');
-            modalInner.classList.remove('scale-100');
-            modalInner.classList.add('scale-95');
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
@@ -536,33 +804,55 @@
                 return;
             }
 
-            if (document.querySelector('input[name="end-date-type"]:checked').value === 'duration') {
-                calculateEndDateFromMonths();
-            }
-
-            smartFormatDate(document.getElementById('start-date-text'));
-            smartFormatDate(document.getElementById('end-date-text'));
-
-            const startDate = parseDateString(document.getElementById('start-date-text').value);
-            const endDate = parseDateString(document.getElementById('end-date-text').value);
-
-            if (!startDate || !endDate || endDate < startDate) {
-                errorMessage.innerText = (!startDate || !endDate) ? "ရက်စွဲပုံစံ မမှန်ပါ။" : "ရက်စွဲ ရှေ့နောက် မှားနေပါသည်။";
-                errorBox.classList.remove('hidden'); 
-                return;
-            }
-            errorBox.classList.add('hidden');
-
             const principal = parseFloat(pInput) || 0;
             const rate = parseFloat(rInput) || 0;
             const dayOption = document.querySelector('input[name="day-option"]:checked').value;
+            const calcType = document.querySelector('input[name="end-date-type"]:checked').value;
+            const startTextVal = document.getElementById('start-date-text').value.trim();
 
-            let mDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
-            let dDiff = endDate.getDate() - startDate.getDate();
-            if (dDiff < 0) { mDiff--; dDiff += new Date(endDate.getFullYear(), endDate.getMonth(), 0).getDate(); }
+            let mDiff = 0;
+            let dDiff = 0;
+            let durationString = '';
 
-            let durationString = `${mDiff > 0 ? mDiff + ' လ ' : ''}${dDiff > 0 ? dDiff + ' ရက်' : ''}`;
-            if (mDiff === 0 && dDiff === 0) durationString = "၀ ရက် (ယနေ့)";
+            if (calcType === 'duration' && !startTextVal) {
+                const monthsInput = document.getElementById('duration-months').value;
+                const daysInput = document.getElementById('duration-days').value;
+                mDiff = parseFloat(monthsInput) || 0;
+                dDiff = parseFloat(daysInput) || 0;
+
+                if (mDiff === 0 && dDiff === 0) {
+                    errorMessage.innerText = "လ သို့မဟုတ် ရက်အရေအတွက် ထည့်သွင်းပါ။";
+                    errorBox.classList.remove('hidden');
+                    return;
+                }
+
+                durationString = `${mDiff > 0 ? mDiff + ' လ ' : ''}${dDiff > 0 ? dDiff + ' ရက်' : ''}`.trim();
+                errorBox.classList.add('hidden');
+            } else {
+                if (calcType === 'duration') {
+                    calculateEndDateFromMonths();
+                }
+
+                smartFormatDate(document.getElementById('start-date-text'));
+                smartFormatDate(document.getElementById('end-date-text'));
+
+                const startDate = parseDateString(document.getElementById('start-date-text').value);
+                const endDate = parseDateString(document.getElementById('end-date-text').value);
+
+                if (!startDate || !endDate || endDate < startDate) {
+                    errorMessage.innerText = (!startDate || !endDate) ? "ရက်စွဲပုံစံ မမှန်ပါ။" : "ရက်စွဲ ရှေ့နောက် မှားနေပါသည်။";
+                    errorBox.classList.remove('hidden'); 
+                    return;
+                }
+                errorBox.classList.add('hidden');
+
+                mDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+                dDiff = endDate.getDate() - startDate.getDate();
+                if (dDiff < 0) { mDiff--; dDiff += new Date(endDate.getFullYear(), endDate.getMonth(), 0).getDate(); }
+
+                durationString = `${mDiff > 0 ? mDiff + ' လ ' : ''}${dDiff > 0 ? dDiff + ' ရက်' : ''}`;
+                if (mDiff === 0 && dDiff === 0) durationString = "၀ ရက် (ယနေ့)";
+            }
 
             const mInterest = principal * (rate / 100);
             let totalInterest = 0;
@@ -576,12 +866,9 @@
             }
 
             document.getElementById('duration-text').innerText = durationString;
-            
-            // Set Principal Values
             document.getElementById('principal-display').innerText = principal.toLocaleString() + " ကျပ်";
             document.getElementById('principal-text-mm').innerText = formatNumberToMyanmarWords(principal);
             
-            // Set Interest & Totals
             document.getElementById('monthly-interest').innerText = mInterest.toLocaleString() + " ကျပ်";
             document.getElementById('total-interest').innerText = Math.round(totalInterest).toLocaleString() + " ကျပ်";
             document.getElementById('grand-total').innerText = Math.round(principal + totalInterest).toLocaleString() + " ကျပ်";
