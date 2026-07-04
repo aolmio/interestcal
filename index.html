@@ -40,12 +40,12 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-slate-950 text-gray-800 dark:text-slate-100 transition-colors duration-300">
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-slate-950 text-gray-800 dark:text-slate-100 transition-colors duration-300">
 
-    <main class="glass-panel w-full max-w-lg md:max-w-2xl lg:max-w-3xl rounded-[2rem] shadow-xl border border-white/50 dark:border-slate-800/50 bg-white/95 dark:bg-slate-900/95 overflow-hidden flex flex-col transition-all duration-300">
+    <main class="glass-panel w-full max-w-lg md:max-w-3xl lg:max-w-4xl rounded-[2.2rem] shadow-2xl border border-white/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-900/95 overflow-hidden flex flex-col transition-all duration-300">
         
-        <header class="bg-indigo-600 dark:bg-indigo-900 px-4 py-4 flex flex-col items-center justify-center rounded-b-[1.5rem] shadow-sm relative z-10">
-            <button onclick="toggleDarkMode()" class="absolute right-4 top-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all" title="Theme Toggle">
+        <header class="bg-indigo-600 dark:bg-indigo-900 px-4 py-5 flex flex-col items-center justify-center rounded-b-[2rem] shadow-md relative z-10">
+            <button onclick="toggleDarkMode()" class="absolute right-4 top-5 p-2.5 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all" title="Theme Toggle">
                 <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707-.707M12 7a5 5 0 110 10 5 5 0 010-10z"></path>
                 </svg>
@@ -54,20 +54,20 @@
                 </svg>
             </button>
 
-            <div class="flex bg-indigo-800/50 dark:bg-indigo-950/60 p-1 rounded-xl w-full max-w-md mt-2">
-                <button onclick="switchTab('interest-tab')" id="tab-btn-interest" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all">
+            <div class="flex bg-indigo-800/50 dark:bg-indigo-950/60 p-1.5 rounded-2xl w-full max-w-md mt-2">
+                <button onclick="switchTab('interest-tab')" id="tab-btn-interest" class="flex-1 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 transition-all">
                     အတိုးတွက်ရန်
                 </button>
-                <button onclick="switchTab('gold-tab')" id="tab-btn-gold" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
+                <button onclick="switchTab('gold-tab')" id="tab-btn-gold" class="flex-1 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition-all">
                     ရွှေတွက်စနစ်
                 </button>
-                <button onclick="switchTab('calc-tab')" id="tab-btn-calc" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
+                <button onclick="switchTab('calc-tab')" id="tab-btn-calc" class="flex-1 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition-all">
                     ဂဏန်းတွက်စက်
                 </button>
             </div>
         </header>
 
-        <section id="interest-tab" class="p-6 sm:p-8 md:p-10 space-y-5 md:space-y-6">
+        <section id="interest-tab" class="p-5 sm:p-8 md:p-10 space-y-5 md:space-y-6">
             
             <div class="space-y-5">
                 <div>
@@ -197,7 +197,7 @@
             
         </section>
 
-        <section id="gold-tab" class="hidden p-6 sm:p-8 md:p-10 space-y-5 md:space-y-6">
+        <section id="gold-tab" class="hidden p-5 sm:p-8 md:p-10 space-y-5 md:space-y-6">
             <div class="space-y-5">
                 <div>
                     <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">လက်ရှိ ရွှေပေါက်ဈေး (၁ ကျပ်သား လျှင်)</label>
@@ -253,45 +253,64 @@
             </div>
         </section>
 
-        <section id="calc-tab" class="hidden p-6 sm:p-8 md:p-10 space-y-5">
-            <div class="relative bg-gray-100 dark:bg-slate-950/60 rounded-[2rem] p-6 sm:p-8 border border-gray-200 dark:border-slate-800 shadow-inner space-y-6">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">ဂဏန်းတွက်စက်</span>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="clearCalc()" class="text-xs bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold py-1.5 px-3 rounded-xl transition-all active:scale-95">C</button>
-                        <button onclick="backspaceCalc()" class="text-xs bg-gray-50 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-1.5 px-3 rounded-xl transition-all active:scale-95">⌫</button>
-                        <button onclick="pasteToCalculator()" class="text-xs bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-400 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            <span>Paste</span>
+        <section id="calc-tab" class="hidden p-4 sm:p-6 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 items-stretch">
+                <div class="md:col-span-5 flex flex-col justify-between space-y-4">
+                    <div class="bg-gray-50 dark:bg-slate-950/40 rounded-[2rem] p-5 sm:p-6 border border-gray-200/60 dark:border-slate-800/60 shadow-inner flex flex-col justify-between flex-grow min-h-[12rem] sm:min-h-[14rem] transition-all duration-300">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">ရလဒ်ပြသရာ</span>
+                            <div id="calc-history" class="text-right text-gray-400 dark:text-slate-500 text-xs font-semibold truncate max-w-[70%]"></div>
+                        </div>
+                        
+                        <div class="flex-grow flex flex-col justify-end">
+                            <input type="text" id="calc-display" inputmode="decimal" oninput="liveEvaluate(this)" class="w-full bg-transparent text-right font-medium text-gray-400 dark:text-slate-500 text-lg sm:text-xl outline-none tracking-wide py-1" placeholder="တွက်ချက်ရန် ဂဏန်းများ ထည့်ပါ">
+                            <div id="calc-live-result" class="text-right font-black text-gray-900 dark:text-slate-100 text-3xl sm:text-4xl md:text-5xl tracking-wide truncate min-h-[3.5rem] select-all pt-1 flex items-center justify-end">0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="copyFromCalculator()" class="py-3 px-4 bg-gray-50 dark:bg-slate-850 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-700 dark:text-slate-200 font-bold rounded-2xl flex items-center justify-center space-x-2 active:scale-95 transition-all border border-gray-200 dark:border-slate-800 shadow-sm text-xs sm:text-sm">
+                            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            <span>ရလဒ် ကူးယူမည်</span>
+                        </button>
+                        <button onclick="useInInterest()" class="py-3 px-4 bg-emerald-50 dark:bg-emerald-950/20 hover:bg-emerald-100 dark:hover:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 font-bold rounded-2xl flex items-center justify-center space-x-2 active:scale-95 transition-all shadow-sm text-xs sm:text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            <span>အတိုးတွက်ရန် ယူမည်</span>
                         </button>
                     </div>
                 </div>
-                <div class="py-6 border-b border-gray-200/50 dark:border-slate-800/50">
-                    <input type="text" id="calc-display" inputmode="decimal" oninput="liveEvaluate(this)" class="w-full bg-transparent text-right font-medium text-gray-500 dark:text-slate-400 text-2xl sm:text-3xl outline-none tracking-wide py-1" placeholder="တွက်ချက်ရန် ဂဏန်းများ ထည့်ပါ">
-                    <div id="calc-live-result" class="text-right font-black text-gray-900 dark:text-slate-100 text-5xl sm:text-6xl tracking-wide truncate min-h-[4rem] select-all pt-2">0</div>
-                </div>
-                <div id="calc-history" class="text-right text-gray-400 dark:text-slate-500 text-sm h-5 overflow-hidden font-semibold pr-1"></div>
-                
-                <div class="flex items-center justify-end space-x-2 pt-2">
-                    <button onclick="copyFromCalculator()" class="text-xs bg-gray-50 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-2.5 px-4 rounded-xl flex items-center space-x-1.5 active:scale-95 transition-all border border-gray-200 dark:border-slate-700">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        <span>ရလဒ် ကူးယူမည်</span>
-                    </button>
-                    <button onclick="useInInterest()" class="text-xs bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold py-2.5 px-4 rounded-xl flex items-center space-x-1.5 active:scale-95 transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                        <span>အတိုးတွက်ရန် ယူမည်</span>
-                    </button>
-                </div>
-            </div>
 
-            <div class="grid grid-cols-4 gap-3">
-                <button onclick="inputCalc('%')" class="py-3 bg-indigo-50 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl text-lg transition-all active:scale-90">%</button>
-                <button onclick="inputCalc('÷')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">÷</button>
-                <button onclick="inputCalc('×')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">×</button>
-                <button onclick="inputCalc('-')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">-</button>
-                
-                <button onclick="inputCalc('+')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90 col-span-2">+</button>
-                <button onclick="evaluateCalc()" class="py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-lg transition-all active:scale-90 col-span-2 shadow-lg shadow-indigo-150 dark:shadow-none">=</button>
+                <div class="md:col-span-7 bg-gray-50/50 dark:bg-slate-950/20 p-4 sm:p-5 rounded-[2rem] border border-gray-200/50 dark:border-slate-800/50">
+                    <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+                        <button onclick="clearCalc()" class="py-4 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold rounded-2xl text-lg transition-all active:scale-90 shadow-sm">C</button>
+                        <button onclick="backspaceCalc()" class="py-4 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold rounded-2xl text-lg transition-all active:scale-90 shadow-sm">⌫</button>
+                        <button onclick="pasteToCalculator()" class="py-4 bg-indigo-50 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-750 dark:text-indigo-400 font-bold rounded-2xl text-sm transition-all active:scale-90 shadow-sm flex items-center justify-center space-x-1">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            <span class="hidden sm:inline">Paste</span>
+                        </button>
+                        <button onclick="inputCalc('÷')" class="py-4 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold rounded-2xl text-xl transition-all active:scale-90 shadow-sm">÷</button>
+
+                        <button onclick="inputCalc('7')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">7</button>
+                        <button onclick="inputCalc('8')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">8</button>
+                        <button onclick="inputCalc('9')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">9</button>
+                        <button onclick="inputCalc('×')" class="py-4 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold rounded-2xl text-xl transition-all active:scale-90 shadow-sm">×</button>
+
+                        <button onclick="inputCalc('4')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">4</button>
+                        <button onclick="inputCalc('5')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">5</button>
+                        <button onclick="inputCalc('6')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">6</button>
+                        <button onclick="inputCalc('-')" class="py-4 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold rounded-2xl text-xl transition-all active:scale-90 shadow-sm">-</button>
+
+                        <button onclick="inputCalc('1')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">1</button>
+                        <button onclick="inputCalc('2')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">2</button>
+                        <button onclick="inputCalc('3')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">3</button>
+                        <button onclick="inputCalc('+')" class="py-4 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold rounded-2xl text-xl transition-all active:scale-90 shadow-sm">+</button>
+
+                        <button onclick="inputCalc('%')" class="py-4 bg-indigo-55 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-400 font-bold rounded-2xl text-lg transition-all active:scale-90 shadow-sm">%</button>
+                        <button onclick="inputCalc('0')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">0</button>
+                        <button onclick="inputCalc('.')" class="py-4 bg-white dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-slate-200 font-extrabold rounded-2xl text-xl transition-all active:scale-90 shadow-sm border border-gray-100 dark:border-slate-850">.</button>
+                        <button onclick="evaluateCalc()" class="py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xl transition-all active:scale-90 shadow-md shadow-indigo-200 dark:shadow-none">=</button>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -308,7 +327,7 @@
                 </button>
             </div>
 
-            <div id="result-content-area" class="p-5 space-y-4 overflow-y-auto shrink text-gray-800 dark:text-slate-100 animate-slide-up">
+            <div id="result-content-area" class="p-5 space-y-4 overflow-y-auto shrink text-gray-800 dark:text-slate-100">
             </div>
             
             <div class="px-5 pb-6 pt-2 bg-white dark:bg-slate-900 shrink-0 flex flex-col gap-2 border-t border-gray-100 dark:border-slate-800">
@@ -1103,7 +1122,7 @@
             renderGoldLogs();
 
             const contentHtml = `
-                <div class="space-y-4 text-gray-800 dark:text-slate-100 animate-slide-up">
+                <div class="space-y-4 text-gray-800 dark:text-slate-100">
                     <div onclick="copyRawText('${displayWeightString}', 'ရွှေအလေးချိန်စုစုပေါင်း')" class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
                         <span class="text-base font-bold text-gray-600 dark:text-slate-400 flex items-center gap-1.5">
                             ရွှေအလေးချိန်စုစုပေါင်း
