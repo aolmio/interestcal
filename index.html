@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="my" class="transition-colors duration-300">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>အတိုးတွက်စနစ်</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link class="pwa-manifest" rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
@@ -13,7 +18,6 @@
     <style>
         body { 
             font-family: 'Inter', 'Padauk', sans-serif; 
-            background: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
         }
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -29,7 +33,6 @@
             width: auto;
         }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
         input::placeholder {
@@ -37,16 +40,28 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-slate-950 text-gray-800 dark:text-slate-100 transition-colors duration-300">
 
-    <main class="glass-panel w-full max-w-lg md:max-w-2xl lg:max-w-3xl rounded-[2rem] shadow-xl border border-white/50 overflow-hidden flex flex-col transition-all duration-300">
+    <main class="glass-panel w-full max-w-lg md:max-w-2xl lg:max-w-3xl rounded-[2rem] shadow-xl border border-white/50 dark:border-slate-800/50 bg-white/95 dark:bg-slate-900/95 overflow-hidden flex flex-col transition-all duration-300">
         
-        <header class="bg-indigo-600 px-4 py-3 flex flex-col items-center justify-center rounded-b-[1.5rem] shadow-sm relative z-10">
-            <div class="flex bg-indigo-800/50 p-1 rounded-xl w-full max-w-xs">
-                <button onclick="switchTab('interest-tab')" id="tab-btn-interest" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all">
+        <header class="bg-indigo-600 dark:bg-indigo-900 px-4 py-4 flex flex-col items-center justify-center rounded-b-[1.5rem] shadow-sm relative z-10">
+            <button onclick="toggleDarkMode()" class="absolute right-4 top-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all" title="Theme Toggle">
+                <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707-.707M12 7a5 5 0 110 10 5 5 0 010-10z"></path>
+                </svg>
+                <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+
+            <div class="flex bg-indigo-800/50 dark:bg-indigo-950/60 p-1 rounded-xl w-full max-w-md mt-2">
+                <button onclick="switchTab('interest-tab')" id="tab-btn-interest" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all">
                     အတိုးတွက်ရန်
                 </button>
-                <button onclick="switchTab('calc-tab')" id="tab-btn-calc" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
+                <button onclick="switchTab('gold-tab')" id="tab-btn-gold" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
+                    ရွှေတွက်စနစ်
+                </button>
+                <button onclick="switchTab('calc-tab')" id="tab-btn-calc" class="flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all">
                     ဂဏန်းတွက်စက်
                 </button>
             </div>
@@ -56,40 +71,40 @@
             
             <div class="space-y-5">
                 <div>
-                    <label class="block text-sm md:text-base font-semibold text-gray-700 mb-1.5 ml-1">စာဖြင့်ရိုက်ထည့်ရန် (ဥပမာ - ၁၅သိန်း၄သောင်း)</label>
+                    <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">စာဖြင့်ရိုက်ထည့်ရန် (ဥပမာ - ၁၅သိန်း၄သောင်း)</label>
                     <div class="relative">
-                        <input type="text" id="principal-text-input" oninput="convertMyanmarTextToNumber(this.value)" class="w-full pl-4 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm md:text-base outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800" placeholder="ဆယ်သိန်း / 5သိန်း၁သောင်း">
+                        <input type="text" id="principal-text-input" oninput="convertMyanmarTextToNumber(this.value)" class="w-full pl-4 pr-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl text-sm md:text-base outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100" placeholder="ဆယ်သိန်း / 5သိန်း၁သောင်း">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-1.5 ml-1">အရင်းပမာဏ</label>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">အရင်းပမာဏ</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-gray-400 font-medium text-lg pr-2 border-r border-gray-200">K</span>
+                                <span class="text-gray-400 dark:text-slate-500 font-medium text-lg pr-2 border-r border-gray-200 dark:border-slate-700">K</span>
                             </div>
-                            <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full pl-14 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg tracking-wide" placeholder="ဂဏန်းဖြင့် (ဥပမာ - 300000)">
+                            <input type="text" id="principal" inputmode="numeric" pattern="[0-9]*" class="w-full pl-14 pr-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg tracking-wide" placeholder="ဂဏန်းဖြင့် (ဥပမာ - 300000)">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-1.5 ml-1">အတိုးနှုန်း (ကျပ်)</label>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">အတိုးနှုန်း (ကျပ်)</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                <svg class="w-5 h-5 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                             </div>
-                            <input type="text" id="rate" inputmode="numeric" pattern="[0-9]*" class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ဥပမာ - 3">
+                            <input type="text" id="rate" inputmode="numeric" pattern="[0-9]*" class="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="ဥပမာ - 3">
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-end">
                     <div>
-                        <label class="block text-sm md:text-base font-semibold text-gray-700 mb-1.5 ml-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
+                        <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">စတင်ပေါင်နှံသည့် ရက်စွဲ</label>
                         <div class="relative">
-                            <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg pr-12" placeholder="DD-MM-YYYY">
-                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-xl">
+                            <input type="text" id="start-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg pr-12" placeholder="DD-MM-YYYY">
+                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400 rounded-xl">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 <input type="date" id="start-date-picker" onchange="syncPickerToText('start-date-picker', 'start-date-text')" class="absolute opacity-0 inset-0 cursor-pointer w-full h-full">
                             </div>
@@ -97,20 +112,20 @@
                     </div>
 
                     <div class="flex flex-col space-y-2">
-                        <div class="bg-indigo-50/60 p-1.5 rounded-2xl flex border border-indigo-100 h-[46px] md:h-[50px]">
+                        <div class="bg-indigo-50/60 dark:bg-slate-800/60 p-1.5 rounded-2xl flex border border-indigo-100 dark:border-slate-700 h-[46px] md:h-[50px]">
                             <label class="flex-1 text-center cursor-pointer relative h-full">
                                 <input type="radio" name="end-date-type" value="date" checked onchange="toggleEndInputType()" class="peer hidden">
-                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white peer-checked:shadow-sm font-bold text-gray-500 peer-checked:text-indigo-600 transition-all text-sm">ရက်စွဲဖြင့်</div>
+                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:shadow-sm font-bold text-gray-500 dark:text-slate-400 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 transition-all text-sm">ရက်စွဲဖြင့်</div>
                             </label>
                             <label class="flex-1 text-center cursor-pointer relative h-full">
                                 <input type="radio" name="end-date-type" value="duration" onchange="toggleEndInputType()" class="peer hidden">
-                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white peer-checked:shadow-sm font-bold text-gray-500 peer-checked:text-indigo-600 transition-all text-sm">လအရေအတွက်ဖြင့်</div>
+                                <div class="h-full flex items-center justify-center rounded-xl peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:shadow-sm font-bold text-gray-500 dark:text-slate-400 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400 transition-all text-sm">လအရေအတွက်ဖြင့်</div>
                             </label>
                         </div>
 
                         <div id="end-date-input-container" class="relative">
-                            <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg pr-12" placeholder="ရွေးယူမည့် ရက်စွဲ">
-                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-xl">
+                            <input type="text" id="end-date-text" inputmode="numeric" pattern="[0-9]*" onblur="smartFormatDate(this)" class="w-full px-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg pr-12" placeholder="ရွေးယူမည့် ရက်စွဲ">
+                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400 rounded-xl">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 <input type="date" id="end-date-picker" onchange="syncPickerToText('end-date-picker', 'end-date-text')" class="absolute opacity-0 inset-0 cursor-pointer w-full h-full">
                             </div>
@@ -118,11 +133,11 @@
 
                         <div id="end-duration-input-container" class="hidden grid grid-cols-2 gap-3">
                             <div class="relative">
-                                <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ထားရှိမည့် လ">
+                                <input type="text" id="duration-months" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="ထားရှိမည့် လ">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">လ</span>
                             </div>
                             <div class="relative">
-                                <input type="text" id="duration-days" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-gray-800 text-lg" placeholder="ထားရှိမည့် ရက်">
+                                <input type="text" id="duration-days" inputmode="numeric" pattern="[0-9]*" oninput="calculateEndDateFromMonths()" class="w-full px-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="ထားရှိမည့် ရက်">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">ရက်</span>
                             </div>
                         </div>
@@ -130,51 +145,51 @@
                 </div>
             </div>
 
-            <div class="pt-3 pb-1 border-t border-gray-100">
-                <button type="button" onclick="toggleAdvancedOptions()" class="flex items-center space-x-2 text-indigo-600 font-bold text-sm hover:text-indigo-800 transition-colors w-full justify-center bg-indigo-50 py-2.5 rounded-xl">
+            <div class="pt-3 pb-1 border-t border-gray-100 dark:border-slate-800">
+                <button type="button" onclick="toggleAdvancedOptions()" class="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm hover:text-indigo-800 transition-colors w-full justify-center bg-indigo-50 dark:bg-slate-800 py-2.5 rounded-xl">
                     <svg id="advanced-icon" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     <span>ရက်စွန်းတွက်နည်း ပြောင်းရန်</span>
                 </button>
                 
                 <div id="advanced-options" class="hidden mt-4 space-y-3 transition-all duration-300">
-                    <label class="block text-sm font-semibold text-slate-700 text-center">ရက်စွန်းတွက်နည်း ရွေးချယ်ရန်</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">ရက်စွန်းတွက်နည်း ရွေးချယ်ရန်</label>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <label class="cursor-pointer">
                             <input type="radio" name="day-option" value="full-month" checked class="peer sr-only">
-                            <div class="px-3 py-2 border-2 border-slate-200 rounded-xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition-all text-center">
-                                <span class="block text-sm font-bold text-slate-700 peer-checked:text-indigo-700">၁ လစာ ယူရန်</span>
-                                <span class="block text-xs text-slate-500 mt-1">၁ ရက်စွန်းလျှင်</span>
+                            <div class="px-3 py-2 border-2 border-slate-200 dark:border-slate-700 rounded-xl peer-checked:border-indigo-600 dark:peer-checked:border-indigo-400 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-950/40 transition-all text-center">
+                                <span class="block text-sm font-bold text-slate-700 dark:text-slate-300 peer-checked:text-indigo-700 dark:peer-checked:text-indigo-400">၁ လစာ ယူရန်</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400 mt-1">၁ ရက်စွန်းလျှင်</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="day-option" value="half-month" class="peer sr-only">
-                            <div class="px-3 py-2 border-2 border-slate-200 rounded-xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition-all text-center">
-                                <span class="block text-sm font-bold text-slate-700 peer-checked:text-indigo-700">လဝက် / ၁လစာ</span>
-                                <span class="block text-xs text-slate-500 mt-1">၁၅ရက် ထက်ကျော်လျှင်</span>
+                            <div class="px-3 py-2 border-2 border-slate-200 dark:border-slate-700 rounded-xl peer-checked:border-indigo-600 dark:peer-checked:border-indigo-400 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-950/40 transition-all text-center">
+                                <span class="block text-sm font-bold text-slate-700 dark:text-slate-300 peer-checked:text-indigo-700 dark:peer-checked:text-indigo-400">လဝက် / ၁လစာ</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400 mt-1">၁၅ရက် ထက်ကျော်လျှင်</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="day-option" value="exact" class="peer sr-only">
-                            <div class="px-3 py-2 border-2 border-slate-200 rounded-xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition-all text-center">
-                                <span class="block text-sm font-bold text-slate-700 peer-checked:text-indigo-700">တိကျစွာတွက်ရန်</span>
-                                <span class="block text-xs text-slate-500 mt-1">ရက်အလိုက်</span>
+                            <div class="px-3 py-2 border-2 border-slate-200 dark:border-slate-700 rounded-xl peer-checked:border-indigo-600 dark:peer-checked:border-indigo-400 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-950/40 transition-all text-center">
+                                <span class="block text-sm font-bold text-slate-700 dark:text-slate-300 peer-checked:text-indigo-700 dark:peer-checked:text-indigo-400">တိကျစွာတွက်ရန်</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400 mt-1">ရက်အလိုက်</span>
                             </div>
                         </label>
                     </div>
                 </div>
             </div>
 
-            <div id="error-box" class="bg-red-50 text-red-600 p-3 rounded-2xl text-sm font-semibold hidden text-center border border-red-100 flex items-center justify-center space-x-2">
+            <div id="error-box" class="bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 p-3 rounded-2xl text-sm font-semibold hidden text-center border border-red-100 dark:border-red-900/50 flex items-center justify-center space-x-2">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span id="error-message"></span>
             </div>
 
             <div class="grid grid-cols-12 gap-3 pt-1">
-                <button onclick="clearAllFields()" class="col-span-4 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center space-x-1.5 text-sm md:text-base">
+                <button onclick="clearAllFields()" class="col-span-4 py-3.5 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center space-x-1.5 text-sm md:text-base">
                     <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     <span>ဖျက်မည်</span>
                 </button>
-                <button onclick="parseAndCalculate()" class="col-span-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition-all active:scale-95 text-base md:text-lg flex items-center justify-center space-x-2">
+                <button onclick="parseAndCalculate()" class="col-span-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none transition-all active:scale-95 text-base md:text-lg flex items-center justify-center space-x-2">
                     <span>တွက်ချက်မည်</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
@@ -182,110 +197,121 @@
             
         </section>
 
+        <section id="gold-tab" class="hidden p-6 sm:p-8 md:p-10 space-y-5 md:space-y-6">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">လက်ရှိ ရွှေပေါက်ဈေး (၁ ကျပ်သား လျှင်)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="text-gray-400 dark:text-slate-500 font-medium text-lg pr-2 border-r border-gray-200 dark:border-slate-700">K</span>
+                        </div>
+                        <input type="text" id="gold-price" inputmode="decimal" class="w-full pl-14 pr-4 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg tracking-wide" placeholder="ဥပမာ - 4500000">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm md:text-base font-semibold text-gray-700 dark:text-slate-300 mb-1.5 ml-1">ရွှေအလေးချိန်</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="relative">
+                            <input type="text" id="gold-wt-kyat" inputmode="decimal" class="w-full px-3 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="0">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">ကျပ်</span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" id="gold-wt-pai" inputmode="decimal" class="w-full px-3 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="0">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">ပဲ</span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" id="gold-wt-yway" inputmode="decimal" class="w-full px-3 py-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:bg-white dark:focus:bg-slate-800 transition-all text-gray-800 dark:text-slate-100 text-lg" placeholder="0">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">ရွေး</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gold-error-box" class="bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 p-3 rounded-2xl text-sm font-semibold hidden text-center border border-red-100 dark:border-red-900/50 flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="gold-error-message"></span>
+            </div>
+
+            <div class="grid grid-cols-12 gap-3 pt-1">
+                <button onclick="clearGoldFields()" class="col-span-4 py-3.5 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center space-x-1.5 text-sm md:text-base">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>ဖျက်မည်</span>
+                </button>
+                <button onclick="calculateGoldPawn()" class="col-span-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none transition-all active:scale-95 text-base md:text-lg flex items-center justify-center space-x-2">
+                    <span>တွက်ချက်မည်</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+
+            <div id="gold-log-section" class="border-t border-gray-100 dark:border-slate-800 pt-5 hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-bold text-gray-500 dark:text-slate-400">ယာယီမှတ်တမ်းများ</h3>
+                    <button onclick="clearGoldLogs()" class="text-xs text-red-600 dark:text-red-400 font-bold hover:underline">မှတ်တမ်းအားလုံးဖျက်ရန်</button>
+                </div>
+                <div id="gold-logs-list" class="space-y-3 max-h-48 overflow-y-auto pr-1"></div>
+            </div>
+        </section>
+
         <section id="calc-tab" class="hidden p-6 sm:p-8 md:p-10 space-y-5">
-            <div class="relative bg-gray-100 rounded-3xl p-5 border border-gray-200">
-                <div class="flex items-center justify-between space-x-2 mb-2">
-                    <button onclick="pasteToCalculator()" class="text-xs bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        <span>Paste</span>
-                    </button>
+            <div class="relative bg-gray-100 dark:bg-slate-950/60 rounded-[2rem] p-6 sm:p-8 border border-gray-200 dark:border-slate-800 shadow-inner space-y-6">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">ဂဏန်းတွက်စက်</span>
                     <div class="flex items-center space-x-2">
-                        <button onclick="copyFromCalculator()" class="text-xs bg-gray-50 border border-gray-200 hover:bg-gray-200 text-gray-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            <span>Copy</span>
-                        </button>
-                        <button onclick="useInInterest()" class="text-xs bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                            <span>Use in Interest</span>
+                        <button onclick="clearCalc()" class="text-xs bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold py-1.5 px-3 rounded-xl transition-all active:scale-95">C</button>
+                        <button onclick="backspaceCalc()" class="text-xs bg-gray-50 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-1.5 px-3 rounded-xl transition-all active:scale-95">⌫</button>
+                        <button onclick="pasteToCalculator()" class="text-xs bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-400 font-bold py-1.5 px-3 rounded-lg flex items-center space-x-1.5 active:scale-95 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            <span>Paste</span>
                         </button>
                     </div>
                 </div>
-                <input type="text" id="calc-display" inputmode="decimal" oninput="cleanCalcInput(this)" class="w-full bg-transparent text-right font-bold text-gray-800 text-3xl outline-none tracking-wide" placeholder="0">
-                <div id="calc-history" class="text-right text-gray-400 text-sm h-5 overflow-hidden mt-1 font-semibold pr-1"></div>
+                <div class="py-6 border-b border-gray-200/50 dark:border-slate-800/50">
+                    <input type="text" id="calc-display" inputmode="decimal" oninput="liveEvaluate(this)" class="w-full bg-transparent text-right font-medium text-gray-500 dark:text-slate-400 text-2xl sm:text-3xl outline-none tracking-wide py-1" placeholder="တွက်ချက်ရန် ဂဏန်းများ ထည့်ပါ">
+                    <div id="calc-live-result" class="text-right font-black text-gray-900 dark:text-slate-100 text-5xl sm:text-6xl tracking-wide truncate min-h-[4rem] select-all pt-2">0</div>
+                </div>
+                <div id="calc-history" class="text-right text-gray-400 dark:text-slate-500 text-sm h-5 overflow-hidden font-semibold pr-1"></div>
+                
+                <div class="flex items-center justify-end space-x-2 pt-2">
+                    <button onclick="copyFromCalculator()" class="text-xs bg-gray-50 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-2.5 px-4 rounded-xl flex items-center space-x-1.5 active:scale-95 transition-all border border-gray-200 dark:border-slate-700">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        <span>ရလဒ် ကူးယူမည်</span>
+                    </button>
+                    <button onclick="useInInterest()" class="text-xs bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold py-2.5 px-4 rounded-xl flex items-center space-x-1.5 active:scale-95 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        <span>အတိုးတွက်ရန် ယူမည်</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-3.5">
-                <button onclick="clearCalc()" class="py-5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">C</button>
-                <button onclick="backspaceCalc()" class="py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">⌫</button>
+            <div class="grid grid-cols-4 gap-3">
+                <button onclick="inputCalc('%')" class="py-3 bg-indigo-50 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl text-lg transition-all active:scale-90">%</button>
+                <button onclick="inputCalc('÷')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">÷</button>
+                <button onclick="inputCalc('×')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">×</button>
+                <button onclick="inputCalc('-')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90">-</button>
                 
-                <button onclick="inputCalc('%')" class="py-5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-2xl text-xl transition-all active:scale-90">%</button>
-                <button onclick="inputCalc('÷')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">÷</button>
-                <button onclick="inputCalc('×')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">×</button>
-                <button onclick="inputCalc('-')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90">-</button>
-                
-                <button onclick="inputCalc('+')" class="py-5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2">+</button>
-                <button onclick="evaluateCalc()" class="py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xl transition-all active:scale-90 col-span-2 shadow-lg shadow-indigo-150">=</button>
+                <button onclick="inputCalc('+')" class="py-3 bg-indigo-100 dark:bg-indigo-950 hover:bg-indigo-200 dark:hover:bg-indigo-900 text-indigo-800 dark:text-indigo-300 font-bold rounded-xl text-lg transition-all active:scale-90 col-span-2">+</button>
+                <button onclick="evaluateCalc()" class="py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-lg transition-all active:scale-90 col-span-2 shadow-lg shadow-indigo-150 dark:shadow-none">=</button>
             </div>
         </section>
     </main>
 
     <div id="result-modal" class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300 opacity-0">
-        <div id="result-sheet" class="bg-white w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl transform translate-y-full transition-transform duration-300 flex flex-col max-h-[92vh] sm:max-h-[85vh]">
+        <div id="result-sheet" class="bg-white dark:bg-slate-900 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl transform translate-y-full transition-transform duration-300 flex flex-col max-h-[92vh] sm:max-h-[85vh]">
             
-            <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mt-3 mb-1 sm:hidden shrink-0"></div>
+            <div class="w-12 h-1 bg-gray-300 dark:bg-slate-700 rounded-full mx-auto mt-3 mb-1 sm:hidden shrink-0"></div>
 
-            <div class="px-5 py-4 flex items-center justify-between shrink-0 border-b border-gray-100">
-                <h2 class="text-gray-800 font-extrabold text-lg md:text-xl">တွက်ချက်မှု ရလဒ်</h2>
-                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
+            <div class="px-5 py-4 flex items-center justify-between shrink-0 border-b border-gray-100 dark:border-slate-800">
+                <h2 id="result-title" class="text-gray-800 dark:text-slate-100 font-extrabold text-lg md:text-xl">တွက်ချက်မှု ရလဒ်</h2>
+                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-slate-800 rounded-full text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <div class="p-5 space-y-4 overflow-y-auto shrink">
-                
-                <div onclick="copyField('duration-text', 'ကြာမြင့်ချိန်ကာလ')" class="flex justify-between items-center pb-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
-                    <span class="text-base font-bold text-gray-600 flex items-center gap-1.5">
-                        ကြာမြင့်ချိန်ကာလ 
-                        <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    </span>
-                    <span id="duration-text" class="font-extrabold text-gray-900 text-lg"></span>
-                </div>
-
-                <div class="flex flex-row gap-4 pb-3 border-b border-gray-100">
-                    <div onclick="copyField('principal-display', 'အရင်းပမာဏ')" class="flex-1 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
-                        <span class="text-sm font-bold text-gray-600 mb-1 flex items-center gap-1.5">
-                            အရင်းပမာဏ
-                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </span>
-                        <span id="principal-display" class="block font-extrabold text-gray-900 text-base md:text-lg"></span>
-                        <span id="principal-text-mm" class="block text-xs font-semibold text-indigo-600 leading-tight mt-1.5"></span>
-                    </div>
-                    <div class="w-px bg-gray-200"></div>
-                    <div onclick="copyField('monthly-interest', '၁ လစာ အတိုးနှုန်း')" class="flex-1 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
-                        <span class="text-sm font-bold text-gray-600 mb-1 flex items-center gap-1.5">
-                            ၁ လစာ အတိုးနှုန်း
-                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </span>
-                        <span id="monthly-interest" class="block font-extrabold text-gray-900 text-base md:text-lg"></span>
-                        <span id="monthly-interest-text-mm" class="block text-xs font-semibold text-indigo-600 leading-tight mt-1.5"></span>
-                    </div>
-                </div>
-
-                <div onclick="copyField('total-interest', 'ကျသင့်အတိုး')" class="flex justify-between items-center pb-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 p-1.5 rounded-xl transition-all group">
-                    <div>
-                        <span class="text-base font-bold text-gray-600 flex items-center gap-1.5">
-                            ကျသင့်အတိုး
-                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </span>
-                        <span id="total-interest-text-mm" class="block text-xs font-semibold text-indigo-600 mt-1 max-w-[200px] leading-tight"></span>
-                    </div>
-                    <span id="total-interest" class="font-black text-indigo-700 text-2xl tracking-tight text-right"></span>
-                </div>
-
-                <div onclick="copyField('grand-total', 'စုစုပေါင်း')" class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:bg-emerald-100/50 transition-all group">
-                    <div>
-                        <span class="text-base font-extrabold text-emerald-800 flex items-center gap-1.5">
-                            စုစုပေါင်း (အရင်း+အတိုး)
-                            <svg class="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </span>
-                        <span id="grand-total-text-mm" class="block text-xs font-bold text-emerald-700 mt-1 opacity-90 leading-tight"></span>
-                    </div>
-                    <span id="grand-total" class="font-black text-emerald-700 text-3xl tracking-tight mt-2 sm:mt-0 text-right"></span>
-                </div>
-
+            <div id="result-content-area" class="p-5 space-y-4 overflow-y-auto shrink text-gray-800 dark:text-slate-100 animate-slide-up">
             </div>
             
-            <div class="px-5 pb-6 pt-2 bg-white shrink-0 flex flex-col gap-2 border-t border-gray-100">
+            <div class="px-5 pb-6 pt-2 bg-white dark:bg-slate-900 shrink-0 flex flex-col gap-2 border-t border-gray-100 dark:border-slate-800">
                 <button onclick="closeModal()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all text-base shadow-sm active:scale-95">
                     အိုကေ၊ ပိတ်မည်
                 </button>
@@ -294,11 +320,11 @@
     </div>
 
     <div id="paste-modal" class="fixed inset-0 z-[60] hidden bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300">
-            <h3 class="text-gray-800 font-bold text-base mb-3">ဂဏန်းများကို ဤနေရာတွင် ထည့်ပါ (Paste)</h3>
-            <input type="text" id="paste-fallback-input" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-lg font-semibold" placeholder="ဖိပြီး Paste လုပ်ပါ">
+        <div class="bg-white dark:bg-slate-900 rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform scale-95 transition-transform duration-300">
+            <h3 class="text-gray-800 dark:text-slate-100 font-bold text-base mb-3">ဂဏန်းများကို ဤနေရာတွင် ထည့်ပါ (Paste)</h3>
+            <input type="text" id="paste-fallback-input" class="w-full px-4 py-3 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 mb-4 text-lg font-semibold text-gray-850 dark:text-slate-100" placeholder="ဖိပြီး Paste လုပ်ပါ">
             <div class="flex space-x-3">
-                <button onclick="closePasteModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-sm transition-all">မလုပ်တော့ပါ</button>
+                <button onclick="closePasteModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold rounded-xl text-sm transition-all">မလုပ်တော့ပါ</button>
                 <button onclick="confirmPasteFallback()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-indigo-150">ထည့်မည်</button>
             </div>
         </div>
@@ -311,29 +337,68 @@
 
     <script>
         let activePasteCallback = null;
+        let goldLogs = [];
 
         window.onload = function() { 
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(function(err) {});
             }
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon-light').classList.remove('hidden');
+                document.getElementById('theme-icon-dark').classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon-light').classList.add('hidden');
+                document.getElementById('theme-icon-dark').classList.remove('hidden');
+            }
+            if (localStorage.getItem('gold-logs')) {
+                try {
+                    goldLogs = JSON.parse(localStorage.getItem('gold-logs'));
+                    renderGoldLogs();
+                } catch(e) {}
+            }
         };
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            if (isDark) {
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
+            } else {
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            }
+        }
 
         function switchTab(tabId) {
             const intTab = document.getElementById('interest-tab');
+            const goldTab = document.getElementById('gold-tab');
             const calcTab = document.getElementById('calc-tab');
             const btnInt = document.getElementById('tab-btn-interest');
+            const btnGold = document.getElementById('tab-btn-gold');
             const btnCalc = document.getElementById('tab-btn-calc');
+
+            intTab.classList.add('hidden');
+            goldTab.classList.add('hidden');
+            calcTab.classList.add('hidden');
+
+            btnInt.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+            btnGold.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+            btnCalc.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
 
             if (tabId === 'interest-tab') {
                 intTab.classList.remove('hidden');
-                calcTab.classList.add('hidden');
-                btnInt.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
-                btnCalc.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+                btnInt.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
+            } else if (tabId === 'gold-tab') {
+                goldTab.classList.remove('hidden');
+                btnGold.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
             } else {
                 calcTab.classList.remove('hidden');
-                intTab.classList.add('hidden');
-                btnCalc.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
-                btnInt.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-indigo-200 hover:text-white transition-all';
+                btnCalc.className = 'flex-1 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg text-white bg-indigo-600 transition-all';
             }
         }
 
@@ -393,6 +458,18 @@
         }
 
         function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("ကူးယူပြီးပါပြီ။");
+                }).catch(() => {
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
@@ -411,23 +488,64 @@
             document.body.removeChild(textArea);
         }
 
-        function copyField(elementId, fieldName) {
-            const el = document.getElementById(elementId);
-            if (el) {
-                let text = el.innerText;
-                let textToCopy = text;
-                if (elementId !== 'duration-text') {
-                    textToCopy = text.replace(/[^0-9]/g, '');
-                }
-                copyToClipboard(textToCopy);
-                showToast(fieldName + " (" + textToCopy + ") ကို ကူးယူပြီးပါပြီ။");
+        function copyRawText(text, label) {
+            let cleaned = text;
+            if (label !== 'ကြာမြင့်ချိန်ကာလ' && label !== 'ရွှေအလေးချိန်စုစုပေါင်း') {
+                cleaned = text.replace(/[^0-9.]/g, '');
             }
+            copyToClipboard(cleaned);
+            showToast(label + " (" + cleaned + ") ကို ကူးယူပြီးပါပြီ။");
         }
 
-        function cleanCalcInput(el) {
+        function liveEvaluate(el) {
             let val = el.value;
             val = val.replace(/\*/g, '×').replace(/\//g, '÷');
             el.value = val.replace(/[^0-9.+\-×÷%()]/g, '');
+
+            const resultArea = document.getElementById('calc-live-result');
+            let expression = el.value;
+            if (!expression.trim()) {
+                resultArea.innerText = '0';
+                return;
+            }
+            try {
+                let formattedExpr = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                if (/^[0-9.+\-*\/%()\s]+$/.test(formattedExpr)) {
+                    let result = Function('"use strict";return (' + formattedExpr + ')')();
+                    if (result !== undefined && !isNaN(result)) {
+                        resultArea.innerText = Number(parseFloat(result).toFixed(4)).toLocaleString();
+                    }
+                }
+            } catch (err) {}
+        }
+
+        function clearCalc() {
+            document.getElementById('calc-display').value = '';
+            document.getElementById('calc-live-result').innerText = '0';
+            document.getElementById('calc-history').innerText = '';
+        }
+
+        function backspaceCalc() {
+            const display = document.getElementById('calc-display');
+            display.value = display.value.slice(0, -1);
+            liveEvaluate(display);
+        }
+
+        function evaluateCalc() {
+            const display = document.getElementById('calc-display');
+            const history = document.getElementById('calc-history');
+            const resultArea = document.getElementById('calc-live-result');
+            let expression = display.value;
+            if (!expression) return;
+            try {
+                history.innerText = expression + ' =';
+                let formattedExpr = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                let result = Function('"use strict";return (' + formattedExpr + ')')();
+                display.value = Number(parseFloat(result).toFixed(4)).toString();
+                resultArea.innerText = Number(parseFloat(result).toFixed(4)).toLocaleString();
+            } catch (err) {
+                resultArea.innerText = 'Error';
+            }
         }
 
         function inputCalc(val) {
@@ -437,30 +555,28 @@
             } else {
                 display.value += val;
             }
+            liveEvaluate(display);
         }
 
-        function clearCalc() {
-            document.getElementById('calc-display').value = '';
-            document.getElementById('calc-history').innerText = '';
+        function copyFromCalculator() {
+            const val = document.getElementById('calc-live-result').innerText;
+            if (val && val !== '0') {
+                const cleaned = val.replace(/[^0-9.]/g, '');
+                copyToClipboard(cleaned);
+            } else {
+                showToast("ကူးယူစရာ ရလဒ်မရှိပါ");
+            }
         }
 
-        function backspaceCalc() {
-            const display = document.getElementById('calc-display');
-            display.value = display.value.slice(0, -1);
-        }
-
-        function evaluateCalc() {
-            const display = document.getElementById('calc-display');
-            const history = document.getElementById('calc-history');
-            let expression = display.value;
-            if (!expression) return;
-            try {
-                history.innerText = expression + ' =';
-                let formattedExpr = expression.replace(/×/g, '*').replace(/÷/g, '/');
-                let result = Function('"use strict";return (' + formattedExpr + ')')();
-                display.value = Number(parseFloat(result).toFixed(4)).toString();
-            } catch (err) {
-                display.value = 'Error';
+        function useInInterest() {
+            const val = document.getElementById('calc-live-result').innerText;
+            const cleaned = val.replace(/[^0-9.]/g, '');
+            if (cleaned && !isNaN(parseFloat(cleaned))) {
+                document.getElementById('principal').value = Math.round(parseFloat(cleaned));
+                switchTab('interest-tab');
+                showToast("အရင်းပမာဏထဲသို့ ထည့်သွင်းပြီးပါပြီ");
+            } else {
+                showToast("တရားဝင်သော ဂဏန်းမဟုတ်ပါ");
             }
         }
 
@@ -471,27 +587,10 @@
                 if (cleaned) {
                     const display = document.getElementById('calc-display');
                     display.value += cleaned;
+                    liveEvaluate(display);
                     showToast("Paste လုပ်ပြီးပါပြီ");
                 }
             });
-        }
-
-        function copyFromCalculator() {
-            const val = document.getElementById('calc-display').value;
-            if (val) {
-                copyToClipboard(val);
-            }
-        }
-
-        function useInInterest() {
-            const val = document.getElementById('calc-display').value;
-            if (val && !isNaN(parseFloat(val))) {
-                document.getElementById('principal').value = Math.round(parseFloat(val));
-                switchTab('interest-tab');
-                showToast("အရင်းပမာဏထဲသို့ ထည့်သွင်းပြီးပါပြီ");
-            } else {
-                showToast("တရားဝင်သော ဂဏန်းမဟုတ်ပါ");
-            }
         }
 
         function toggleAdvancedOptions() {
@@ -767,7 +866,9 @@
             return (dateObj.getFullYear() === y && dateObj.getMonth() === m && dateObj.getDate() === d) ? dateObj : null;
         }
 
-        function openModal() {
+        function openModal(title, contentHtml) {
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-content-area').innerHTML = contentHtml;
             const modal = document.getElementById('result-modal');
             const sheet = document.getElementById('result-sheet');
             modal.classList.remove('hidden');
@@ -865,19 +966,209 @@
                 totalInterest = mInterest * (mDiff + (dDiff > 0 ? 1 : 0));
             }
 
-            document.getElementById('duration-text').innerText = durationString;
-            document.getElementById('principal-display').innerText = principal.toLocaleString() + " ကျပ်";
-            document.getElementById('principal-text-mm').innerText = formatNumberToMyanmarWords(principal);
-            
-            document.getElementById('monthly-interest').innerText = mInterest.toLocaleString() + " ကျပ်";
-            document.getElementById('total-interest').innerText = Math.round(totalInterest).toLocaleString() + " ကျပ်";
-            document.getElementById('grand-total').innerText = Math.round(principal + totalInterest).toLocaleString() + " ကျပ်";
-            
-            document.getElementById('monthly-interest-text-mm').innerText = formatNumberToMyanmarWords(mInterest);
-            document.getElementById('total-interest-text-mm').innerText = formatNumberToMyanmarWords(totalInterest);
-            document.getElementById('grand-total-text-mm').innerText = formatNumberToMyanmarWords(principal + totalInterest);
+            const dispPrincipal = principal.toLocaleString();
+            const dispMonthlyInterest = mInterest.toLocaleString();
+            const dispTotalInterest = Math.round(totalInterest).toLocaleString();
+            const dispGrandTotal = Math.round(principal + totalInterest).toLocaleString();
 
-            openModal();
+            const mmPrincipal = formatNumberToMyanmarWords(principal);
+            const mmMonthlyInt = formatNumberToMyanmarWords(mInterest);
+            const mmTotalInt = formatNumberToMyanmarWords(totalInterest);
+            const mmGrandTotal = formatNumberToMyanmarWords(principal + totalInterest);
+
+            const contentHtml = `
+                <div class="space-y-4 text-gray-800 dark:text-slate-100">
+                    <div onclick="copyRawText('${durationString}', 'ကြာမြင့်ချိန်ကာလ')" class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
+                        <span class="text-base font-bold text-gray-600 dark:text-slate-400 flex items-center gap-1.5">
+                            ကြာမြင့်ချိန်ကာလ
+                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
+                        <span class="font-extrabold text-gray-900 dark:text-slate-100 text-lg">${durationString}</span>
+                    </div>
+
+                    <div class="flex flex-row gap-4 pb-3 border-b border-gray-100 dark:border-slate-800">
+                        <div onclick="copyRawText('${dispPrincipal}', 'အရင်းပမာဏ')" class="flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
+                            <span class="text-sm font-bold text-gray-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
+                                အရင်းပမာဏ
+                                <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </span>
+                            <span class="block font-extrabold text-gray-900 dark:text-slate-100 text-base md:text-lg">${dispPrincipal} ကျပ်</span>
+                            <span class="block text-xs font-semibold text-indigo-600 dark:text-indigo-400 leading-tight mt-1.5">${mmPrincipal}</span>
+                        </div>
+                        <div class="w-px bg-gray-200 dark:bg-slate-800"></div>
+                        <div onclick="copyRawText('${dispMonthlyInterest}', '၁ လစာ အတိုးနှုန်း')" class="flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
+                            <span class="text-sm font-bold text-gray-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
+                                ၁ လစာ အတိုးနှုန်း
+                                <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </span>
+                            <span class="block font-extrabold text-gray-900 dark:text-slate-100 text-base md:text-lg">${dispMonthlyInterest} ကျပ်</span>
+                            <span class="block text-xs font-semibold text-indigo-600 dark:text-indigo-400 leading-tight mt-1.5">${mmMonthlyInt}</span>
+                        </div>
+                    </div>
+
+                    <div onclick="copyRawText('${dispTotalInterest}', 'ကျသင့်အတိုး')" class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
+                        <div>
+                            <span class="text-base font-bold text-gray-600 dark:text-slate-400 flex items-center gap-1.5">
+                                ကျသင့်အတိုး
+                                <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </span>
+                            <span class="block text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-1 max-w-[200px] leading-tight">${mmTotalInt}</span>
+                        </div>
+                        <span class="font-black text-indigo-700 dark:text-indigo-400 text-2xl tracking-tight text-right">${dispTotalInterest} ကျပ်</span>
+                    </div>
+
+                    <div onclick="copyRawText('${dispGrandTotal}', 'စုစုပေါင်း')" class="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:bg-emerald-100/50 dark:hover:bg-emerald-900/30 transition-all group">
+                        <div>
+                            <span class="text-base font-extrabold text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
+                                စုစုပေါင်း (အရင်း+အတိုး)
+                                <svg class="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </span>
+                            <span class="block text-xs font-bold text-emerald-700 dark:text-emerald-500 mt-1 opacity-90 leading-tight">${mmGrandTotal}</span>
+                        </div>
+                        <span class="font-black text-emerald-700 dark:text-emerald-400 text-3xl tracking-tight mt-2 sm:mt-0 text-right">${dispGrandTotal} ကျပ်</span>
+                    </div>
+                </div>
+            `;
+            openModal("တွက်ချက်မှု ရလဒ်", contentHtml);
+        }
+
+        function formatGoldWeightMyanmar(totalKyats) {
+            let k = Math.floor(totalKyats);
+            let remainingKyats = totalKyats - k;
+            let pVal = remainingKyats * 16;
+            let p = Math.floor(pVal + 0.00001);
+            let remainingPai = pVal - p;
+            let yVal = remainingPai * 8;
+            let y = Math.round(yVal * 100) / 100;
+            
+            let parts = [];
+            if (k > 0) parts.push(k + " ကျပ်");
+            if (p > 0) parts.push(p + " ပဲ");
+            if (y > 0) parts.push(y + " ရွေး");
+            return parts.length > 0 ? parts.join(" ") : "၀ ကျပ်သား";
+        }
+
+        function clearGoldFields() {
+            document.getElementById('gold-price').value = '';
+            document.getElementById('gold-wt-kyat').value = '';
+            document.getElementById('gold-wt-pai').value = '';
+            document.getElementById('gold-wt-yway').value = '';
+            document.getElementById('gold-error-box').classList.add('hidden');
+        }
+
+        function calculateGoldPawn() {
+            const errorBox = document.getElementById('gold-error-box');
+            const errorMessage = document.getElementById('gold-error-message');
+
+            const priceInput = document.getElementById('gold-price').value;
+            const kInput = document.getElementById('gold-wt-kyat').value;
+            const pInput = document.getElementById('gold-wt-pai').value;
+            const yInput = document.getElementById('gold-wt-yway').value;
+
+            if (!priceInput || (!kInput && !pInput && !yInput)) {
+                errorMessage.innerText = "ရွှေဈေးနှင့် အလေးချိန်တို့ကို ပြည့်စုံစွာထည့်ပါ။";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            const price = parseFloat(priceInput) || 0;
+            const kyat = parseFloat(kInput) || 0;
+            const pai = parseFloat(pInput) || 0;
+            const yway = parseFloat(yInput) || 0;
+
+            if (price <= 0) {
+                errorMessage.innerText = "ထည့်သွင်းထားသော အချက်အလက်များ မမှန်ကန်ပါ။";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+            errorBox.classList.add('hidden');
+
+            const totalKyats = kyat + (pai / 16) + (yway / 128);
+            const totalValue = totalKyats * price;
+
+            const displayValue = Math.round(totalValue).toLocaleString();
+            const rawValue = Math.round(totalValue).toString();
+            const mmValue = formatNumberToMyanmarWords(totalValue);
+
+            const displayWeightString = formatGoldWeightMyanmar(totalKyats);
+
+            const logItem = {
+                id: Date.now(),
+                wtDesc: displayWeightString,
+                price: price,
+                val: Math.round(totalValue)
+            };
+            goldLogs.unshift(logItem);
+            localStorage.setItem('gold-logs', JSON.stringify(goldLogs));
+            renderGoldLogs();
+
+            const contentHtml = `
+                <div class="space-y-4 text-gray-800 dark:text-slate-100 animate-slide-up">
+                    <div onclick="copyRawText('${displayWeightString}', 'ရွှေအလေးချိန်စုစုပေါင်း')" class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 p-1.5 rounded-xl transition-all group">
+                        <span class="text-base font-bold text-gray-600 dark:text-slate-400 flex items-center gap-1.5">
+                            ရွှေအလေးချိန်စုစုပေါင်း
+                            <svg class="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </span>
+                        <span class="font-extrabold text-gray-900 dark:text-slate-100 text-lg">${displayWeightString}</span>
+                    </div>
+
+                    <div onclick="copyRawText('${rawValue}', 'လက်ရှိကာလတန်ဖိုး')" class="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:bg-emerald-100/50 dark:hover:bg-emerald-900/30 transition-all group">
+                        <div>
+                            <span class="text-base font-extrabold text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
+                                လက်ရှိကာလတန်ဖိုး
+                                <svg class="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </span>
+                            <span class="block text-xs font-bold text-emerald-700 dark:text-emerald-500 mt-1 opacity-90 leading-tight">${mmValue}</span>
+                        </div>
+                        <span class="font-black text-emerald-700 dark:text-emerald-400 text-3xl tracking-tight mt-2 sm:mt-0 text-right">${displayValue} ကျပ်</span>
+                    </div>
+                </div>
+            `;
+            openModal("ရွှေတွက်ချက်မှု ရလဒ်", contentHtml);
+        }
+
+        function renderGoldLogs() {
+            const section = document.getElementById('gold-log-section');
+            const list = document.getElementById('gold-logs-list');
+            list.innerHTML = '';
+            if (goldLogs.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+            section.classList.remove('hidden');
+            goldLogs.forEach(log => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 text-xs text-gray-700 dark:text-slate-300";
+                item.innerHTML = `
+                    <div class="flex-1 min-w-0 pr-2">
+                        <div class="font-bold text-gray-900 dark:text-slate-100 mb-0.5 truncate">${log.wtDesc} (ရွှေဈေး: ${log.price.toLocaleString()})</div>
+                        <div>တန်ဖိုး: <span class="font-bold text-emerald-600 dark:text-emerald-400">${log.val.toLocaleString()} ကျပ်</span></div>
+                    </div>
+                    <div class="flex items-center space-x-1 shrink-0">
+                        <button onclick="copyRawText('${log.val}', 'တန်ဖိုး')" class="p-1.5 bg-gray-200 dark:bg-slate-750 hover:bg-gray-300 dark:hover:bg-slate-700 rounded-lg text-gray-600 dark:text-slate-300" title="ကူးယူမည်">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </button>
+                        <button onclick="deleteGoldLog(${log.id})" class="p-1.5 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg" title="မှတ်တမ်းဖျက်မည်">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function deleteGoldLog(id) {
+            goldLogs = goldLogs.filter(log => log.id !== id);
+            localStorage.setItem('gold-logs', JSON.stringify(goldLogs));
+            renderGoldLogs();
+            showToast("မှတ်တမ်းတစ်ခု ဖျက်ပြီးပါပြီ");
+        }
+
+        function clearGoldLogs() {
+            goldLogs = [];
+            localStorage.removeItem('gold-logs');
+            renderGoldLogs();
+            showToast("မှတ်တမ်းအားလုံး ဖျက်ပြီးပါပြီ");
         }
     </script>
 </body>
